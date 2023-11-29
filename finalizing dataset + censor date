@@ -5,7 +5,18 @@ proc sql;
     where enrolid in (select enrolid from mscan.final_continuous_enrollment);
 quit;
 
-data mscan.final_continuous_enrollment;
-    set mscan.final_continuous_enrollment;
-    
+data enrolid_sex;
+    set mscan.all_enrollment;
+    by enrolid;
+    if first.enrolid;
+    keep enrolid sex;
+run;
+
+proc sql;
+    create table mscan.analytical_cohort as
+    select a.*, b.dobyr
+    from mscan.no_multiple_statin as a
+    left join enrolid_first_dobyr as b
+    on a.enrolid = b.enrolid;
+quit;
 
