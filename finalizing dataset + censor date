@@ -14,7 +14,7 @@ run;
 
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, b.dobyr
+    select a.*, b.sex
     from mscan.final_continuous_enrollment as a
     left join enrolid_sex as b
     on a.enrolid = b.enrolid;
