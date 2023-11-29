@@ -117,6 +117,17 @@ data mscan.overlap_period_final_comb;
     keep first_letter_doac first_letter_statin day0 overlap_start overlap_end combination interacting change_start change_detected;
 run;
 
+/*get age*/
+data enrolid_first_dobyr;
+    set mscan.all_enrollment;
+    by enrolid;
+    if first.enrolid;
+    keep enrolid dobyr;
+run;
+
+data mscan.analytical_cohort;
+    set mscan.analytical_cohort;
+    
 
 
 
