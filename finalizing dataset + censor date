@@ -5,4 +5,7 @@ proc sql;
     where enrolid in (select enrolid from mscan.final_continuous_enrollment);
 quit;
 
+data mscan.final_continuous_enrollment;
+    set mscan.final_continuous_enrollment;
+    
 
