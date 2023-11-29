@@ -22,85 +22,101 @@ proc sql;
 quit;
 
 
-/* Merge datasets and filter based on the condition */
-data mscan.filtered_doac;
-    merge mscan.common_doac (in=a)
-          mscan.analytical_cohort (in=b);
-    by enrolid;
-    if a and b and enddate_doac > day0;
-Run;
+data mscan.overlap_period_final_test;
+   set mscan.overlap_period_final;
+   by enrolid;
+   retain prev_overlap_end;
 
-data mscan.filtered_statin;
-    merge mscan.common_statin (in=a)
-          mscan.analytical_cohort (in=b);
-    by enrolid;
-    if a and b and enddate_statin > day0;
-Run;
+   /* Calculate the difference only if it's not the first enrolid */
+   if not first.enrolid then do;
+      diff = overlap_start - prev_overlap_end;
+      /* Exclude records where the difference is greater than 30 days */
+      if diff > 30 then delete;
+   end;
 
+   /* Update the prev_overlap_end for the next iteration */
+   prev_overlap_end = overlap_end;
+   
+   /* Reset the prev_overlap_end for the first row of the next enrolid */
+   if first.enrolid then prev_overlap_end = overlap_end;
 
-/*get rid of gap > 30 days between drug dispensing*/
-
-proc sort data=mscan.filtered_doac; 
-    by enrolid svcdate_doac;
+   /* Keep the variable from being output to the new dataset */
+   drop prev_overlap_end diff;
 run;
 
-/* Check for gaps greater than 30 days and delete such records */
-data mscan.doac_no_gap;
-    set mscan.filtered_doac;
-    by enrolid;
-    
-    retain prev_enddate;
-    
-    if first.enrolid then do;
-        prev_enddate = enddate_doac;
-    end;
-    else do;
-        if svcdate_doac - prev_enddate > 30 then delete;
-        prev_enddate = enddate_doac;
-    end;
-    
+proc sql noprint;
+   /* Create a new table with max_overlap_end for each enrolid */
+   create table max_overlap_end as
+   select enrolid, max(overlap_end) as max_overlap_end
+   from mscan.overlap_period_final_test
+   group by enrolid;
+quit;
+
+data mscan.overlap_period_final_comb;
+   set mscan.overlap_period_final_test; /* Replace with your actual dataset name */
+   
+   /* Extract the first letter from each variable */
+   first_letter_doac = substr(doac_name, 1, 1);
+   first_letter_statin = substr(statin_name, 1, 1);
+   
+   /* Concatenate the two letters together */
+   combination = cats(first_letter_doac, first_letter_statin);
+run;
+data mscan.overlap_period_final_comb;
+    set mscan.overlap_period_final_comb;
+    if first_letter_statin in ('A', 'S', 'L') then
+        interacting = 1;
+    else
+        interacting = 0;
 run;
 
-proc sort data=mscan.filtered_statin; 
-    by enrolid svcdate_statin;
-run;
+data mscan.analytical_cohort;
+   merge mscan.analytical_cohort(in=a)
+         max_overlap_end(in=b);
+   by enrolid;
 
-/* Check for gaps greater than 30 days and delete such records */
-data mscan.statin_no_gap;
-    set mscan.filtered_statin;
-    by enrolid;
-    
-    retain prev_enddate;
-    
-    if first.enrolid then do;
-        prev_enddate = enddate_statin;
-    end;
-    else do;
-        if svcdate_statin - prev_enddate > 30 then delete;
-        prev_enddate = enddate_statin;
-    end;
-    
+   /* Step 4: Create the new variable discontinuation */
+   if b then discontinuation = max_overlap_end;
+    keep enrolid day0 sex discontinuation;
 run;
 
 
-data mscan.overlap_period_no_gap;
-    merge mscan.doac_no_gap (in=doac) mscan.statin_no_gap (in=statin);
-    by enrolid;
-    if doac and statin;
+data mscan.overlap_period_final_comb;
+   set mscan.overlap_period_final_comb;
+   by enrolid;
 
-    retain day0;
-    if first.enrolid then day0 = .;
+   /* Retain the previous combination and change_start */
+   retain prev_comb change_start change_flag;
 
-    /* Comprehensive condition to check for any overlap */
-    if (svcdate_doac <= enddate_statin and svcdate_statin <= enddate_doac) or
-       (svcdate_doac <= svcdate_statin and enddate_doac >= enddate_statin) or
-       (svcdate_statin <= svcdate_doac and enddate_statin >= enddate_doac) then do;
-        overlap_start = max(svcdate_doac, svcdate_statin);
-        overlap_end = min(enddate_doac, enddate_statin);
+   /* Initialize for the first row of each enrolid */
+   if first.enrolid then do;
+      prev_comb = combination;
+      change_start = .; /* Reset change_start for each new enrolid */
+      change_flag = 0; /* Reset change_flag for each new enrolid */
+   end;
 
-        if day0 = . or overlap_start < day0 then day0 = overlap_start;
-        output;
-    end;
+   /* Detect the first change in combination */
+   else if combination ne prev_comb and change_flag = 0 then do;
+      change_start = overlap_start; /* Record the overlap_start at first change */
+      change_flag = 1; /* Set the flag so no further changes are recorded */
+   end;
 
-    keep enrolid day0 overlap_start overlap_end doac_name statin_name;
+   /* Update the prev_comb for the next iteration */
+   prev_comb = combination;
+
+   /* Optional: Create a flag variable to indicate an enrolid with changes */
+   if last.enrolid and change_flag then change_detected = 1;
+   else change_detected = 0;
+
+   /* Keep only the necessary variables in the new dataset */
+   drop prev_comb change_flag;
 run;
+
+data mscan.overlap_period_final_comb;
+   set mscan.overlap_period_final_comb;
+    keep first_letter_doac first_letter_statin day0 overlap_start overlap_end combination interacting change_start change_detected;
+run;
+
+
+
+
