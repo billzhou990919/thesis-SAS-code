@@ -1,0 +1,4 @@
+/*current dataset is called mscan.final_continuous_enrollment*/
+data mscan.study_cohort;
+    set mscan.final_continuous_enrollment;
+    
