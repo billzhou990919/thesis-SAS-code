@@ -21,3 +21,63 @@ proc sql;
     keep enrolid day0 sex;
 quit;
 
+
+/* Merge datasets and filter based on the condition */
+data mscan.filtered_doac;
+    merge mscan.common_doac (in=a)
+          mscan.analytical_cohort (in=b);
+    by enrolid;
+    if a and b and enddate_doac > day0;
+Run;
+
+data mscan.filtered_statin;
+    merge mscan.common_statin (in=a)
+          mscan.analytical_cohort (in=b);
+    by enrolid;
+    if a and b and enddate_statin > day0;
+Run;
+
+
+/*get rid of gap > 30 days between drug dispensing*/
+
+proc sort data=mscan.filtered_doac; 
+    by enrolid svcdate_doac;
+run;
+
+/* Check for gaps greater than 30 days and delete such records */
+data mscan.doac_no_gap;
+    set mscan.filtered_doac;
+    by enrolid;
+    
+    retain prev_enddate;
+    
+    if first.enrolid then do;
+        prev_enddate = enddate_doac;
+    end;
+    else do;
+        if svcdate_doac - prev_enddate > 30 then delete;
+        prev_enddate = enddate_doac;
+    end;
+    
+run;
+
+proc sort data=mscan.filtered_statin; 
+    by enrolid svcdate_statin;
+run;
+
+/* Check for gaps greater than 30 days and delete such records */
+data mscan.statin_no_gap;
+    set mscan.filtered_statin;
+    by enrolid;
+    
+    retain prev_enddate;
+    
+    if first.enrolid then do;
+        prev_enddate = enddate_statin;
+    end;
+    else do;
+        if svcdate_statin - prev_enddate > 30 then delete;
+        prev_enddate = enddate_statin;
+    end;
+    
+run;
