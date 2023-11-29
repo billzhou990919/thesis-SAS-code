@@ -1,4 +1,8 @@
 /*current dataset is called mscan.final_continuous_enrollment*/
-data mscan.study_cohort;
-    set mscan.final_continuous_enrollment;
-    
+proc sql;
+    create table mscan.overlap_period_final as
+    select * from mscan.overlap_period
+    where enrolid in (select enrolid from mscan.final_continuous_enrollment);
+quit;
+
+
