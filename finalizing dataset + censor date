@@ -125,9 +125,18 @@ data enrolid_first_dobyr;
     keep enrolid dobyr;
 run;
 
+proc sql;
+    create table mscan.analytical_cohort as
+    select a.*, b.dobyr
+    from mscan.analytical_cohort as a
+    left join enrolid_first_dobyr as b
+    on a.enrolid = b.enrolid;
+quit;
+
 data mscan.analytical_cohort;
     set mscan.analytical_cohort;
-    
-
-
+    if not missing(day0) and not missing(dobyr) then do;
+        age = year(day0) - dobyr;
+    end;
+run;
 
