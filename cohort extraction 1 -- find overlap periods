@@ -251,7 +251,39 @@ run;
 
 
 
+/*find overlaps*/
+data mscan.common_doac;
+    set mscan.common_doac;
+    rename drugname = doac_name; /* Renaming drugname to doac_name to avoid conflicts */
+run;
 
+data mscan.common_statin;
+    set mscan.common_statin;
+    rename drugname = statin_name; /* Renaming drugname to statin_name to avoid conflicts */
+run;
+
+proc sort data=mscan.common_doac; by enrolid svcdate_doac enddate_doac; run;
+proc sort data=mscan.common_statin; by enrolid svcdate_statin enddate_statin; run;
+
+data mscan.overlap_period;
+    merge mscan.common_doac (in=doac) mscan.common_statin (in=statin);
+    by enrolid;
+    if doac and statin;
+
+    retain day0;
+    if first.enrolid then day0 = .;
+
+    /* Comprehensive condition to check for any overlap */
+    if (svcdate_doac <= enddate_statin and svcdate_statin <= enddate_doac) then do;
+        overlap_start = max(svcdate_doac, svcdate_statin);
+        overlap_end = min(enddate_doac, enddate_statin);
+
+        if day0 = . or overlap_start < day0 then day0 = overlap_start;
+        output;
+    end;
+
+    keep enrolid day0 overlap_start overlap_end doac_name statin_name;
+run;
 
 
 
