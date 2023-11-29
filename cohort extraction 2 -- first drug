@@ -1,9 +1,9 @@
 /*get a list of unique enrolid and day0* called unique_enrolid_day0, add which drug started first here*/
-proc sort data=mscan.overlap_period;
+proc sort data=mscan.overlap_period_3;
     by enrolid day0;
 run;
 data mscan.unique_enrolid_day0;
-    set mscan.overlap_period;
+    set mscan.overlap_period_3;
     by enrolid;
     if first.enrolid;
     keep enrolid day0;
