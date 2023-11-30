@@ -26,3 +26,9 @@ proc sql;
     on a.enrolid = b.enrolid;
 quit;
 
+/*add censor date = min(discontinuation, switch date, and adverse_event date*/
+data mscan.analytical_cohort; /* Replace 'your_dataset' with the actual name of your dataset */
+    set mscan.analytical_cohort;
+    censor_date = min(of discontinuation switch_date admdate);
+    format censor_date discontinuation day0 switch_date admdate MMDDYY10.; 
+run;
