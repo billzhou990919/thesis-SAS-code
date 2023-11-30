@@ -196,15 +196,15 @@ Data mscan.common_doac;
     Format enddate mmddyy10.;
 Run;
 
-/*delete those with days supply = 0*/
+/*delete those with days supply <= 0*/
 Data mscan.common_statin;
     Set mscan.common_statin;
-    If daysupp ne 0;
+    If daysupp > 0;
 Run;
 
 Data mscan.common_doac;
     Set mscan.common_doac;
-    If daysupp ne 0;
+    If daysupp > 0;
 Run;
 
 
