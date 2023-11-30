@@ -1,0 +1,5 @@
+data mscan.analytical_cohort; /* Replace 'your_dataset' with the actual name of your dataset */
+    set mscan.analytical_cohort;
+    if admdate ne . then adverse_event = 1;
+    else adverse_event = 0;
+run;
