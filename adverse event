@@ -1,0 +1,80 @@
+proc sql;
+    create table mscan.inpatient2011 as
+    select a.enrolid, a.admdate, a.dx1, a.dx2, a.dx3, a.dx4, a.dx5, a.dx6, a.dx7, a.dx8,
+a.dx9, a.dx10, a.dx11, a.dx12, a.dx13, a.dx14, a.dx15
+    from source.ccaei112 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+quit;
+
+proc sql;
+    create table mscan.inpatient2012 as
+    select a.enrolid, a.admdate, a.dx1, a.dx2, a.dx3, a.dx4, a.dx5, a.dx6, a.dx7, a.dx8,
+a.dx9, a.dx10, a.dx11, a.dx12, a.dx13, a.dx14, a.dx15
+    from source.ccaei121 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+quit;
+
+proc sql;
+    create table mscan.inpatient2013 as
+    select a.enrolid, a.admdate, a.dx1, a.dx2, a.dx3, a.dx4, a.dx5, a.dx6, a.dx7, a.dx8,
+a.dx9, a.dx10, a.dx11, a.dx12, a.dx13, a.dx14, a.dx15
+    from source.ccaei131 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.inpatient2014 as
+    select a.enrolid, a.admdate, a.dx1, a.dx2, a.dx3, a.dx4, a.dx5, a.dx6, a.dx7, a.dx8,
+a.dx9, a.dx10, a.dx11, a.dx12, a.dx13, a.dx14, a.dx15
+    from source.ccaei141 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.inpatient2015 as
+    select a.enrolid, a.admdate, a.dx1, a.dx2, a.dx3, a.dx4, a.dx5, a.dx6, a.dx7, a.dx8,
+a.dx9, a.dx10, a.dx11, a.dx12, a.dx13, a.dx14, a.dx15
+    from source.ccaei151 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.inpatient2016 as
+    select a.enrolid, a.admdate, a.dx1, a.dx2, a.dx3, a.dx4, a.dx5, a.dx6, a.dx7, a.dx8,
+a.dx9, a.dx10, a.dx11, a.dx12, a.dx13, a.dx14, a.dx15
+    from source.ccaei161 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.inpatient2017 as
+    select a.enrolid, a.admdate, a.dx1, a.dx2, a.dx3, a.dx4, a.dx5, a.dx6, a.dx7, a.dx8,
+a.dx9, a.dx10, a.dx11, a.dx12, a.dx13, a.dx14, a.dx15
+    from source.ccaei171 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.inpatient2018 as
+    select a.enrolid, a.admdate, a.dx1, a.dx2, a.dx3, a.dx4, a.dx5, a.dx6, a.dx7, a.dx8,
+a.dx9, a.dx10, a.dx11, a.dx12, a.dx13, a.dx14, a.dx15
+    from source.ccaei181 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.inpatient2019 as
+    select a.enrolid, a.admdate, a.dx1, a.dx2, a.dx3, a.dx4, a.dx5, a.dx6, a.dx7, a.dx8,
+a.dx9, a.dx10, a.dx11, a.dx12, a.dx13, a.dx14, a.dx15
+    from source.ccaei192 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+quit;
