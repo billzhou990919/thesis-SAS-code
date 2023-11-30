@@ -1,5 +1,25 @@
+/*add adverse_event indicator*/
 data mscan.analytical_cohort; /* Replace 'your_dataset' with the actual name of your dataset */
     set mscan.analytical_cohort;
     if admdate ne . then adverse_event = 1;
     else adverse_event = 0;
 run;
+
+/*add interacting indicator*/
+proc sql;
+    create table mscan.enrolid_interacting as
+    select a.enrolid, b.interacting
+    from mscan.analytical_cohort as a
+    left join mscan.overlap_period_final_comb as b
+    on a.enrolid = b.enrolid
+    where b.change_detected = 1
+    group by a.enrolid;
+quit;
+
+proc sql;
+    create table mscan.analytical_cohort as
+    select a.*, b.switch_date, b.switch_indicator
+    from mscan.analytical_cohort as a
+    left join mscan.enrolid_change_start as b
+    on a.enrolid = b.enrolid;
+quit;
