@@ -114,7 +114,7 @@ run;
 
 data mscan.overlap_period_final_comb;
    set mscan.overlap_period_final_comb;
-    keep first_letter_doac first_letter_statin day0 overlap_start overlap_end combination interacting change_start change_detected;
+    keep enrolid first_letter_doac first_letter_statin day0 overlap_start overlap_end combination interacting change_start change_detected;
 run;
 
 /*get age*/
@@ -139,4 +139,39 @@ data mscan.analytical_cohort;
         age = year(day0) - dobyr;
     end;
 run;
+
+/*get doac + statin + combination*/
+data enrolid_d_s_comb;
+    set mscan.overlap_period_final_comb;
+    by enrolid;
+    if first.enrolid;
+    keep enrolid first_letter_doac first_letter_statin combination;
+run;
+
+proc sql;
+    create table mscan.analytical_cohort as
+    select a.*, b.first_letter_doac, b.first_letter_statin, b.combination
+    from mscan.analytical_cohort as a
+    left join enrolid_d_s_comb as b
+    on a.enrolid = b.enrolid;
+quit;
+
+/*add switching indicator and switch date to analytical cohort*/
+proc sql;
+    create table mscan.enrolid_change_start as
+    select a.enrolid, min(b.change_start) as switch_date, b.change_detected as switch_indicator
+    from mscan.analytical_cohort as a
+    left join mscan.overlap_period_final_comb as b
+    on a.enrolid = b.enrolid
+    where b.change_detected = 1
+    group by a.enrolid;
+quit;
+
+proc sql;
+    create table mscan.analytical_cohort as
+    select a.*, b.switch_date, b.switch_indicator
+    from mscan.analytical_cohort as a
+    left join mscan.enrolid_change_start as b
+    on a.enrolid = b.enrolid;
+quit;
 
