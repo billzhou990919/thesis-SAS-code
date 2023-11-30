@@ -218,6 +218,52 @@ data mscan.all_drug_claims;
     if a and b;
 run;
 
+
+/*actual code for overlap periods*/
+data mscan.overlap_period_3;
+    merge mscan.common_doac (in=doac) mscan.common_statin (in=statin);
+    by enrolid;
+    if doac and statin;
+
+    retain day0;
+    if first.enrolid then day0 = .;
+
+    /* Comprehensive condition to check for any overlap */
+    if (svcdate_doac <= enddate_statin and svcdate_statin <= enddate_doac) or
+       (svcdate_doac <= svcdate_statin and enddate_doac >= enddate_statin) or
+       (svcdate_statin <= svcdate_doac and enddate_statin >= enddate_doac) then do;
+        overlap_start = max(svcdate_doac, svcdate_statin);
+        overlap_end = min(enddate_doac, enddate_statin);
+
+        if day0 = . or overlap_start < day0 then day0 = overlap_start;
+        output;
+    end;
+
+    keep enrolid day0 overlap_start overlap_end doac_name statin_name;
+run;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*test codes*/
+
 /*find overlaps*/
 data mscan.common_doac;
     set mscan.common_doac (rename=(svcdate=svcdate_doac enddate=enddate_doac));
@@ -309,28 +355,4 @@ data mscan.overlap_period_2;
 
     keep enrolid overlap_start overlap_end doac_name statin_name;
 run;
-
-
-data mscan.overlap_period_3;
-    merge mscan.common_doac (in=doac) mscan.common_statin (in=statin);
-    by enrolid;
-    if doac and statin;
-
-    retain day0;
-    if first.enrolid then day0 = .;
-
-    /* Comprehensive condition to check for any overlap */
-    if (svcdate_doac <= enddate_statin and svcdate_statin <= enddate_doac) or
-       (svcdate_doac <= svcdate_statin and enddate_doac >= enddate_statin) or
-       (svcdate_statin <= svcdate_doac and enddate_statin >= enddate_doac) then do;
-        overlap_start = max(svcdate_doac, svcdate_statin);
-        overlap_end = min(enddate_doac, enddate_statin);
-
-        if day0 = . or overlap_start < day0 then day0 = overlap_start;
-        output;
-    end;
-
-    keep enrolid day0 overlap_start overlap_end doac_name statin_name;
-run;
-
 
