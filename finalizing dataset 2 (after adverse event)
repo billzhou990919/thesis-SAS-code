@@ -27,8 +27,14 @@ proc sql;
 quit;
 
 /*add censor date = min(discontinuation, switch date, and adverse_event date*/
-data mscan.analytical_cohort; /* Replace 'your_dataset' with the actual name of your dataset */
+data mscan.analytical_cohort; 
     set mscan.analytical_cohort;
     censor_date = min(of discontinuation switch_date admdate);
     format censor_date discontinuation day0 switch_date admdate MMDDYY10.; 
+run;
+
+/*calculate survival time*/
+data mscan.analytical_cohort; 
+    set mscan.analytical_cohort;
+    survival_time = min(of discontinuation switch_date admdate) - day0;
 run;
