@@ -6,20 +6,23 @@ data mscan.analytical_cohort; /* Replace 'your_dataset' with the actual name of 
 run;
 
 /*add interacting indicator*/
-proc sql;
-    create table mscan.enrolid_interacting as
-    select a.enrolid, b.interacting
-    from mscan.analytical_cohort as a
-    left join mscan.overlap_period_final_comb as b
-    on a.enrolid = b.enrolid
-    where b.change_detected = 1
-    group by a.enrolid;
-quit;
+proc sort data=mscan.overlap_period_final_comb;
+    by enrolid overlap_start;
+run;
+
+
+data enrolid_interacting;
+    set mscan.overlap_period_final_comb;
+    by enrolid;
+    if first.enrolid;
+    keep enrolid interacting;
+run;
 
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, b.switch_date, b.switch_indicator
+    select a.*, b.interacting
     from mscan.analytical_cohort as a
-    left join mscan.enrolid_change_start as b
+    left join enrolid_interacting as b
     on a.enrolid = b.enrolid;
 quit;
+
