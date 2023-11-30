@@ -1,0 +1,5 @@
+proc phreg data=mscan.analytical_cohort;
+    class interacting;
+    model survival_time*adverse_event(0) = interacting / ties=breslow;
+    hazardratio 'Interacting' interacting;
+run;
