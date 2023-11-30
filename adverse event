@@ -302,3 +302,13 @@ data mscan.adverse_event;
     by enrolid;
     if first.enrolid;
 run;
+
+
+
+proc sql;
+    create table mscan.analytical_cohort as
+    select a.*, b.admdate
+    from mscan.analytical_cohort as a
+    left join mscan.adverse_event as b
+    on a.enrolid = b.enrolid;
+quit;
