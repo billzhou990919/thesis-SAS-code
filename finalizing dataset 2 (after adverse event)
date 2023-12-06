@@ -38,3 +38,25 @@ data mscan.analytical_cohort;
     set mscan.analytical_cohort;
     survival_time = min(of discontinuation switch_date admdate) - day0;
 run;
+
+
+/*add first drug indicator*/
+proc sort data=mscan.overlap_period_final_comb;
+    by enrolid overlap_start;
+run;
+
+
+data enrolid_interacting;
+    set mscan.overlap_period_final_comb;
+    by enrolid;
+    if first.enrolid;
+    keep enrolid interacting;
+run;
+
+proc sql;
+    create table mscan.analytical_cohort as
+    select a.*, b.interacting
+    from mscan.analytical_cohort as a
+    left join enrolid_interacting as b
+    on a.enrolid = b.enrolid;
+quit;
