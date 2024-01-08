@@ -53,3 +53,15 @@ proc sql;
     left join mscan.unique_enrolid_day0_4 as b
     on a.enrolid = b.enrolid;
 quit;
+
+data mscan.analytical_cohort; 
+    set mscan.analytical_cohort;
+    end_of_study = 21914;
+    censor_date = min(of discontinuation switch_date admdate end_of_study);
+    format censor_date discontinuation day0 switch_date admdate MMDDYY10.; 
+run;
+
+data mscan.analytical_cohort; 
+    set mscan.analytical_cohort;
+    survival_time = censor_date - day0;
+run;
