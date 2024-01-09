@@ -81,7 +81,37 @@ proc sql;
     join mscan.analytical_cohort b
     on a.enrolid = b.enrolid;
 Quit;
+////////////////////////////
+proc sql;
+    create table mscan.outpatient2015 as
+    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo151
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
 
+proc sql;
+    create table mscan.outpatient2016 as
+    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo161
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
+
+proc sql;
+    create table mscan.outpatient2017 as
+    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo171
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
+
+proc sql;
+    create table mscan.outpatient2018 as
+    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo181
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
+
+proc sql;
+    create table mscan.outpatient2019 as
+    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo192
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
+/////////////////////
 proc sql;
     create table mscan.outpatient2016 as
     select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
@@ -119,3 +149,30 @@ Data mscan.outpatient;
 Set mscan.outpatient2010 mscan.outpatient2011 mscan.outpatient2012 mscan.outpatient2013 mscan.outpatient2014 mscan.outpatient2015 mscan.outpatient2016 mscan.outpatient2017 
 Mscan.outpatient2018  mscan.outpatient2019;
 Run;
+
+
+proc sql;
+    create table combined as
+    select a.enrolid, a.day0, b.svcdate
+    from mscan.analytical_cohort as a
+    left join mscan.outpatient as b
+    on a.enrolid = b.enrolid
+    where intck('year', b.svcdate, a.day0) < 1 and b.svcdate < a.day0;
+quit;
+
+/* Counting the inpatient records for each enrolid */
+proc sql;
+    create table final_count as
+    select enrolid, count(svcdate) as outpatient_count
+    from combined
+    group by enrolid;
+quit;
+
+/* Merging the count back with the original analytical_cohort dataset */
+proc sql;
+    create table mscan.analytical_cohort as
+    select a.*, coalesce(b.outpatient_count, 0) as outpatient_count
+    from mscan.analytical_cohort as a
+    left join final_count as b
+    on a.enrolid = b.enrolid;
+quit;
