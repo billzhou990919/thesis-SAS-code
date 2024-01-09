@@ -30,3 +30,92 @@ proc sql;
     left join final_count as b
     on a.enrolid = b.enrolid;
 quit;
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+/*outpaient*/
+proc sql;
+    create table mscan.outpatient2010 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo103 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+quit;
+
+proc sql;
+    create table mscan.outpatient2011 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo112 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+quit;
+
+proc sql;
+    create table mscan.outpatient2012 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo121 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+quit;
+
+proc sql;
+    create table mscan.outpatient2013 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo131 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.outpatient2014 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo141 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.outpatient2015 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo151 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.outpatient2016 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo161 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.outpatient2017 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo171 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.outpatient2018 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo181 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+Quit;
+
+proc sql;
+    create table mscan.outpatient2019 as
+    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
+    from source.ccaeo192 a
+    join mscan.analytical_cohort b
+    on a.enrolid = b.enrolid;
+quit;
+
+
+Data mscan.outpatient;
+Set mscan.outpatient2010 mscan.outpatient2011 mscan.outpatient2012 mscan.outpatient2013 mscan.outpatient2014 mscan.outpatient2015 mscan.outpatient2016 mscan.outpatient2017 
+Mscan.outpatient2018  mscan.outpatient2019;
+Run;
