@@ -1,0 +1,5 @@
+proc sql;
+    create table mscan.all_doac_2011 as
+    select * from source.ccaed112
+    where ndcnum in (select ndcnum from mscan.ndc_doac);
+quit;
