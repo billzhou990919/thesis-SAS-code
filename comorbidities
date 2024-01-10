@@ -1,22 +1,156 @@
 proc sql;
-    create table flagged_diabetes as
-    select distinct a.enrolid
+    create table mscan.outpatient as
+    select a.*, b.day0
     from mscan.outpatient as a
-    inner join mscan.analytical_cohort as b
-    on a.enrolid = b.enrolid
-    where (a.dx1 in:('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
-           a.dx2 in:('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
-           a.dx3 in:('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
-           a.dx4 in:('250', 'E08', 'E09', 'E10', 'E11', 'E13') )
-    and intck('year', a.svcdate, b.day0) <= 1
-    group by a.enrolid;
-quit;
-
-/* Step 2: Merge with Analytical Cohort to Update/Create Diabetes Variable */
-proc sql;
-    create table mscan.analytical_cohort_updated as
-    select a.*, (case when b.enrolid is not null then 1 else 0 end) as diabetes
-    from mscan.analytical_cohort as a
-    left join flagged_diabetes as b
+    left join mscan.analytical_cohort as b
     on a.enrolid = b.enrolid;
 quit;
+/////////////////diabetes///////////
+data flag_diabetes;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx2 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx3 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx4 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13')) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_diabetes nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data flag_diabetes_ip;
+    set mscan.inpatient;
+    if (0 <= (day0 - admdate) <=365) and (dx1 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx2 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx3 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx4 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx5 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx6 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx7 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx8 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx9 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx10 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx11 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx12 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx13 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx14 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or
+        dx15 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13')) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_diabetes_ip nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data mscan.analytical_cohort_test;
+    merge mscan.analytical_cohort(in=a) flag_diabetes(in=b);
+    by enrolid;
+    if b then diabetes_op = 1;
+    else diabetes_op = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort_test;
+    merge mscan.analytical_cohort_test(in=a) flag_diabetes_ip(in=b);
+    by enrolid;
+    if b then diabetes_ip = 1;
+    else diabetes_ip = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort_test;
+    set mscan.analytical_cohort_test;
+    if (diabetes_ip = 1 or diabetes_op = 1) then diabetes = 1; else diabetes = 0;
+    drop diabetes_ip diabetes_op;
+run;
+/////////////////stroke and systemic embolism///////////
+data flag_stk;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx2 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx3 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx4 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13')) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+
+proc sort data=mscan.flag_diabetes nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) mscan.flag_diabetes(in=b);
+    by enrolid;
+    if b then diabetes = 1;
+    else diabetes = 0;
+    drop flag;
+run;
+/////////////////diabetes///////////
+data mscan.flag_diabetes;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx2 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx3 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx4 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13')) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+
+proc sort data=mscan.flag_diabetes nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) mscan.flag_diabetes(in=b);
+    by enrolid;
+    if b then diabetes = 1;
+    else diabetes = 0;
+    drop flag;
+run;
+/////////////////diabetes///////////
+data mscan.flag_diabetes;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx2 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx3 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx4 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13')) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+
+proc sort data=mscan.flag_diabetes nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) mscan.flag_diabetes(in=b);
+    by enrolid;
+    if b then diabetes = 1;
+    else diabetes = 0;
+    drop flag;
+run;
+/////////////////diabetes///////////
+data mscan.flag_diabetes;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx2 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx3 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+        dx4 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13')) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+
+proc sort data=mscan.flag_diabetes nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) mscan.flag_diabetes(in=b);
+    by enrolid;
+    if b then diabetes = 1;
+    else diabetes = 0;
+    drop flag;
+run;
