@@ -4,10 +4,10 @@ proc sql;
     from mscan.outpatient as a
     inner join mscan.analytical_cohort as b
     on a.enrolid = b.enrolid
-    where (a.dx1 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
-           a.dx2 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
-           a.dx3 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
-           a.dx4 in: ('250', 'E08', 'E09', 'E10', 'E11', 'E13') )
+    where (a.dx1 in:('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+           a.dx2 in:('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+           a.dx3 in:('250', 'E08', 'E09', 'E10', 'E11', 'E13') or 
+           a.dx4 in:('250', 'E08', 'E09', 'E10', 'E11', 'E13') )
     and intck('year', a.svcdate, b.day0) <= 1
     group by a.enrolid;
 quit;
