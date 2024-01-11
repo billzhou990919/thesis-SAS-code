@@ -1,67 +1,69 @@
 ///// getting all drug files /////
 proc sql;
+    create table mscan.comedication2010 as
+    select enrolid, svcdate, ndcnum from source.ccaed103
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
+
+proc sql;
+    create table mscan.comedication2011 as
+    select enrolid, svcdate, ndcnum from source.ccaed112
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
+
+proc sql;
+    create table mscan.comedication2012 as
+    select enrolid, svcdate, ndcnum from source.ccaed121
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
+
+proc sql;
+    create table mscan.comedication2013 as
+    select enrolid, svcdate, ndcnum from source.ccaed131
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
+
+proc sql;
+    create table mscan.comedication2014 as
+    select enrolid, svcdate, ndcnum from source.ccaed141
+    where enrolid in (select enrolid from mscan.analytical_cohort);
+quit;
+
+
+proc sql;
     create table mscan.comedication2015 as
-    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo151
+    select enrolid, svcdate, ndcnum from source.ccaed151
     where enrolid in (select enrolid from mscan.analytical_cohort);
 quit;
 
 proc sql;
-    create table mscan.outpatient2016 as
-    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo161
+    create table mscan.comedication2016 as
+    select enrolid, svcdate, ndcnum from source.ccaed161
     where enrolid in (select enrolid from mscan.analytical_cohort);
 quit;
 
 proc sql;
-    create table mscan.outpatient2017 as
-    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo171
+    create table mscan.comedication2017 as
+    select enrolid, svcdate, ndcnum from source.ccaed171
     where enrolid in (select enrolid from mscan.analytical_cohort);
 quit;
 
 proc sql;
-    create table mscan.outpatient2018 as
-    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo181
+    create table mscan.comedication2018 as
+    select enrolid, svcdate, ndcnum from source.ccaed181
     where enrolid in (select enrolid from mscan.analytical_cohort);
 quit;
 
 proc sql;
-    create table mscan.outpatient2019 as
-    select enrolid, svcdate, dx1, dx2, dx3, dx4 from source.ccaeo192
+    create table mscan.comedication2019 as
+    select enrolid, svcdate, ndcnum from source.ccaed192
     where enrolid in (select enrolid from mscan.analytical_cohort);
 quit;
 /////////////////////
-proc sql;
-    create table mscan.outpatient2016 as
-    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
-    from source.ccaeo161 a
-    join mscan.analytical_cohort b
-    on a.enrolid = b.enrolid;
-Quit;
-
-proc sql;
-    create table mscan.outpatient2017 as
-    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
-    from source.ccaeo171 a
-    join mscan.analytical_cohort b
-    on a.enrolid = b.enrolid;
-Quit;
-
-proc sql;
-    create table mscan.outpatient2018 as
-    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
-    from source.ccaeo181 a
-    join mscan.analytical_cohort b
-    on a.enrolid = b.enrolid;
-Quit;
-
-proc sql;
-    create table mscan.outpatient2019 as
-    select a.enrolid, a.svcdate, a.dx1, a.dx2, a.dx3, a.dx4
-    from source.ccaeo192 a
-    join mscan.analytical_cohort b
-    on a.enrolid = b.enrolid;
-quit;
 
 
-Data mscan.outpatient;
-Set mscan.outpatient2010 mscan.outpatient2011 mscan.outpatient2012 mscan.outpatient2013 mscan.outpatient2014 mscan.outpatient2015 mscan.outpatient2016 mscan.outpatient2017 
-Mscan.outpatient2018  mscan.outpatient2019;
+Data mscan.comedication;
+Set mscan.comedication2010 mscan.comedication2011 mscan.comedication2012 mscan.comedication2013 mscan.comedication2014 mscan.comedication2015 mscan.comedication2016 mscan.comedication2017 
+Mscan.comedication2018  mscan.comedication2019;
+
+
