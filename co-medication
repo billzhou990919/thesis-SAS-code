@@ -66,4 +66,13 @@ Data mscan.comedication;
 Set mscan.comedication2010 mscan.comedication2011 mscan.comedication2012 mscan.comedication2013 mscan.comedication2014 mscan.comedication2015 mscan.comedication2016 mscan.comedication2017 
 Mscan.comedication2018  mscan.comedication2019;
 
+////getting all co-medications 3 months prior to day0 or within the concomitant period/////
+proc sql;
+    create table mscan.comedication_final as
+    select a.enrolid, a.day0, a.censor_date, b.svcdate, b.ndcnum
+    from mscan.analytical_cohort as a
+    left join mscan.comedication as b
+    on a.enrolid = b.enrolid
+    where (0 <= (a.day0 - b.svcdate) <= 90) or (a.day0 <= b.svcdate < a.censor_date);
+quit;
 
