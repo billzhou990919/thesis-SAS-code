@@ -374,7 +374,7 @@ data mscan.analytical_cohort;
     if (bleeding_ip = 1 or bleeding_op = 1) then prior_bleeding = 1; else prior_bleeding = 0;
     drop bleeding_ip bleeding_op;
 run;
-/////////////////hypertension///////////
+/*hypertension*/
 data flag_hyptertension;
     set mscan.outpatient;
     if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('401','402','403', '404', '405', 'I10', 'I11', 'I12', 'I13', 'I15')  or 
@@ -431,7 +431,7 @@ data mscan.analytical_cohort;
     if (hyptertension_ip = 1 or hyptertension_op = 1) then hyptertension = 1; else hyptertension = 0;
     drop hyptertension_ip hyptertension_op;
 run;
-/////////////////Myocardial infarction, peripheral artery disease, or aortic plaque///////////
+/*Myocardial infarction, peripheral artery disease, or aortic plaque*/
 data flag_mi;
     set mscan.outpatient;
     if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('412','410','44020','44021','44022','44023','44024','44029', '44030','44031','44032','4439','444','445','440','I21', 'I23','I700','I702','I703','I704','I705','I706','I707','I708','I709','I71','I739') or 
@@ -488,7 +488,7 @@ data mscan.analytical_cohort;
     if (mi_ip = 1 or mi_op = 1) then mi = 1; else mi = 0;
     drop mi_ip mi_op;
 run;
-/////////////////alcohol///////////
+/*alcohol*/
 data flag_alcohol;
     set mscan.outpatient;
     if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('291','3030','3039','3050','3575','4255','5711','5712','5713','F10', 'K70', 'E52', 'T51', 'K860', 'E244', 'G312', 'I426', 'O354', 'Z714', 'Z721', 'G621', 'G721', 'K292', 'L278A') or 
@@ -545,7 +545,7 @@ data mscan.analytical_cohort;
     if (alcohol_ip = 1 or alcohol_op = 1) then alcohol = 1; else alcohol = 0;
     drop alcohol_ip alcohol_op;
 run;
-/////////////////Congestive heart failure///////////
+/*Congestive heart failure*/
 data flag_chf;
     set mscan.outpatient;
     if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('39891','40201','40211', '40291', '40401', '40411', '40403', '40413', '40491', '40493', 'I110', 'I130', 'I132', '428', 'I50')  or 
