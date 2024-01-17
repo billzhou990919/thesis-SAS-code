@@ -639,6 +639,8 @@ quit;
 /* Merge the sorted datasets */
 proc sql;
     update mscan.comedication_final
-    set new_variable = 'proton_pump_inhibitors'
+    set new_variable = 'proton_p_inhibitors'
     where ndcnum in (select ndcnum from temp);
 quit;
+
+
