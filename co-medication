@@ -348,4 +348,22 @@ run;
 /*identify the co-medications based on ndcnum*/
 data mscan.comedication_final;
 set mscan.comedication_final;
-drug_class = 'acei' if ndcnum
+drug_class = 'acei' if ndcnum in (select ndcnum from mscan.ndc_acei);
+drug_class = 'arb' if ndcnum in (select ndcnum from mscan.ndc_arb);
+drug_class = 'av' if ndcnum in (select ndcnum from mscan.ndc_av);
+drug_class = 'Aspirin' if ndcnum in (select ndcnum from mscan.ndc_aspirin);
+drug_class = 'Antiarrhythmics' if ndcnum in (select ndcnum from mscan.ndc_antiarrhythmics);
+drug_class = 'Antiplatelets' if ndcnum in (select ndcnum from mscan.ndc_antiplatelets);
+drug_class = 'Beta-Blockers' if ndcnum in (select ndcnum from mscan.ndc_beta_blockers);
+drug_class = 'Calcium-channel blockers' if ndcnum in (select ndcnum from mscan.ndc_calcium_channel_blockers);
+drug_class = 'Diuretics' if ndcnum in (select ndcnum from mscan.ndc_diuretics);
+drug_class = 'Other antihypertensives' if ndcnum in (select ndcnum from mscan.ndc_other_antihypertensives);
+drug_class = 'Diabetes drugs' if ndcnum in (select ndcnum from mscan.ndc_diabetes_drugs);
+drug_class = 'Estrogens' if ndcnum in (select ndcnum from mscan.ndc_estrogens);
+drug_class = 'Progestins' if ndcnum in (select ndcnum from mscan.ndc_progestins);
+drug_class = 'Heparin and low-molecular-weight heparins' if ndcnum in (select ndcnum from mscan.ndc_heparin_lmwh);
+drug_class = 'Nonsteroidal anti-inflammatory drugs' if ndcnum in (select ndcnum from mscan.ndc_nsaids);
+drug_class = 'Nonstatin lipid-lowering drugs' if ndcnum in (select ndcnum from mscan.ndc_nonstatin);
+drug_class = 'Proton-pump inhibitors' if ndcnum in (select ndcnum from mscan.ndc_proton_pump_inhibitors);
+
+run;
