@@ -1,1 +1,36 @@
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES hyptertension* interacting;
+RUN;
+
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES ckd* interacting;
+RUN;
+
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES liver* interacting;
+RUN;
+
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES stroke_se* interacting;
+RUN;
+
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES prior_bleeding* interacting;
+RUN;
+
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES alcohol* interacting;
+RUN;
+
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES diabetes* interacting;
+RUN;
+
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES chf* interacting;
+RUN;
+
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES mi* interacting;
+RUN;
 
