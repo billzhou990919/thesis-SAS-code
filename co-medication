@@ -666,18 +666,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'arb' then arb_flag = 1;
+    else arb_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(arb_flag) as arb_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.arb_flag, 0) as arb
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -685,18 +685,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'av' then av_flag = 1;
+    else av_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(av_flag) as av_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.av_flag, 0) as av
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -704,18 +704,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'aspirin' then aspirin_flag = 1;
+    else aspirin_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(aspirin_flag) as aspirin_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.aspirin_flag, 0) as aspirin
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -723,18 +723,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'antiarrhythmics' then antiarrhythmics_flag = 1;
+    else antiarrhythmics_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(antiarrhythmics_flag) as antiarrhythmics_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.antiarrhythmics_flag, 0) as antiarrhythmics
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -742,18 +742,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'antiplatelets' then antiplatelets_flag = 1;
+    else antiplatelets_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(antiplatelets_flag) as antiplatelets_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.antiplatelets_flag, 0) as antiplatelets
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -761,18 +761,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'beta_blockers' then beta_blockers_flag = 1;
+    else beta_blockers_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(beta_blockers_flag) as beta_blockers_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.beta_blockers_flag, 0) as beta_blockers
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -780,18 +780,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'calcium_c_blockers' then calcium_c_blockers_flag = 1;
+    else calcium_c_blockers_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(calcium_c_blockers_flag) as calcium_c_blockers_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.calcium_c_blockers_flag, 0) as calcium_c_blockers
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -799,18 +799,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'diuretics' then diuretics_flag = 1;
+    else diuretics_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(diuretics_flag) as diuretics_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.diuretics_flag, 0) as diuretics
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -818,18 +818,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'other_antihypertensives' then other_antihypertensives_flag = 1;
+    else other_antihypertensives_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(other_antihypertensives_flag) as other_antihypertensives_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.other_antihypertensives_flag, 0) as other_antihypertensives
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -837,18 +837,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'diabetes_drugs' then diabetes_drugs_flag = 1;
+    else diabetes_drugs_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(diabetes_drugs_flag) as diabetes_drugs_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.diabetes_drugs_flag, 0) as diabetes_drugs
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -856,18 +856,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'estrogens' then estrogens_flag = 1;
+    else estrogens_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(estrogens_flag) as estrogens_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.estrogens_flag, 0) as estrogens
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -875,18 +875,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'progestins' then progestins_flag = 1;
+    else progestins_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(progestins_flag) as progestins_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.progestins_flag, 0) as progestins
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -894,18 +894,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'heparin_lmwh' then heparin_lmwh_flag = 1;
+    else heparin_lmwh_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(heparin_lmwh_flag) as heparin_lmwh_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.heparin_lmwh_flag, 0) as heparin_lmwh
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -913,18 +913,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'nsaids' then nsaids_flag = 1;
+    else nsaids_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(nsaids_flag) as nsaids_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.nsaids_flag, 0) as nsaids
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -932,18 +932,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'nonstatin' then nonstatin_flag = 1;
+    else nonstatin_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(nonstatin_flag) as nonstatin_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.nonstatin_flag, 0) as nonstatin
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
@@ -951,18 +951,18 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'acei' then acei_flag = 1;
-    else acei_flag = 0;
+    if new_variable = 'proton_p_inhibitors' then proton_p_inhibitors_flag = 1;
+    else proton_p_inhibitors_flag = 0;
 run;
 proc sql;
     create table aggregated_comedication as
-    select enrolid, max(acei_flag) as acei_flag
+    select enrolid, max(proton_p_inhibitors_flag) as proton_p_inhibitors_flag
     from temp_comedication
     group by enrolid;
 quit;
 proc sql;
     create table mscan.analytical_cohort as
-    select a.*, coalesce(b.acei_flag, 0) as acei
+    select a.*, coalesce(b.proton_p_inhibitors_flag, 0) as proton_p_inhibitors
     from mscan.analytical_cohort as a
     left join aggregated_comedication as b
     on a.enrolid = b.enrolid;
