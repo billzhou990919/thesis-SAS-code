@@ -718,3 +718,62 @@ data mscan.analytical_cohort;
     if (liver_ip = 1 or liver_op = 1) then liver = 1; else liver = 0;
     drop liver_ip liver_op;
 run;
+
+
+/*atrial fibrillation*/
+data flag_af;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or 
+        dx2 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or 
+        dx3 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or 
+        dx4 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_af nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data flag_af_ip;
+    set mscan.inpatient;
+    if (0 <= (day0 - admdate) <=365) and (dx1 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or 
+        dx2 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or 
+        dx3 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or 
+        dx4 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx5 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx6 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx7 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx8 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx9 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx10 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx11 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx12 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx13 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx14 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')   or
+        dx15 in: ('4273', '42731', '42732', 'I48', 'I480', 'I481', 'I4811', 'I4819', 'I482', 'I4820', 'I4821', 'I483', 'I484', 'I489', 'I4891', 'I4892')  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_af_ip nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_af(in=b);
+    by enrolid;
+    if b then af_op = 1;
+    else af_op = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_af_ip(in=b);
+    by enrolid;
+    if b then af_ip = 1;
+    else af_ip = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    set mscan.analytical_cohort;
+    if (af_ip = 1 or af_op = 1) then af = 1; else af = 0;
+    drop af_ip af_op;
+run;
