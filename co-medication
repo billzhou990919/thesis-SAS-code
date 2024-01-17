@@ -340,3 +340,12 @@ data mscan.ndc_proton_pump_inhibitors;
        lowcase(GENNME) in:('omeprazole', 'pantoprazole', 'lansoprazole', 'rabeprazole', 'esomeprazole', 'dexlansoprazole', 'dexrabeprazole', 'vonoprazan');
 
 run;
+
+
+
+
+
+/*identify the co-medications based on ndcnum*/
+data mscan.comedication_final;
+set mscan.comedication_final;
+drug_class = 'acei' if ndcnum
