@@ -367,3 +367,76 @@ drug_class = 'Nonstatin lipid-lowering drugs' if ndcnum in (select ndcnum from m
 drug_class = 'Proton-pump inhibitors' if ndcnum in (select ndcnum from mscan.ndc_proton_pump_inhibitors);
 
 run;
+
+
+/* Sort the mscan.ndc_acei dataset */
+proc sort data=mscan.ndc_acei;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_arb;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_av;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_aspirin;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_antiarrhythmics;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_antiplatelets;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_beta_blockers;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_calcium_channel_blockers;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_diuretics;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_other_antihypertensives;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_diabetes_drugs;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_estrogens;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_progestins;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_heparin_lmwh;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_nsaids;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_nonstatin;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_proton_pump_inhibitors;
+    by ndcnum;
+run;
+
+
+/* Sort the mscan.comedication_final dataset */
+proc sort data=mscan.comedication_final;
+    by ndcnum;
+run;
+
+/* Create a temporary dataset with ndcnum from mscan.ndc_acei */
+proc sql;
+    create table temp as 
+    select distinct ndcnum from mscan.ndc_acei;
+quit;
+
+/* Merge the sorted datasets */
+data mscan.comedication_final_test;
+    merge mscan.comedication_final(in=a) temp(in=b);
+    by ndcnum;
+    if b then drug_class = 'acei';
+run;
