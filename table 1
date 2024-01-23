@@ -1,3 +1,9 @@
+PROC MEANS DATA=mscan.analytical_cohort;
+   CLASS interacting;
+   VAR age;
+   MEAN STD;
+   RUN;
+
 PROC FREQ DATA=mscan.analytical_cohort;
     TABLES hyptertension* interacting;
 RUN;
