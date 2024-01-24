@@ -818,7 +818,7 @@ quit;
 
 data temp_comedication;
     set mscan.comedication_final;
-    if new_variable = 'other_antihypertensives' then other_antihypertensives_flag = 1;
+    if new_variable = 'other_antihypertensi' then other_antihypertensives_flag = 1;
     else other_antihypertensives_flag = 0;
 run;
 proc sql;
