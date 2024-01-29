@@ -2,55 +2,20 @@
 
 proc univariate data=mscan.analytical_cohort; var survival_time; histogram; run;
 
-%let covaraites = age sex racem_black racem_hispanic racem_white racem_other maritalm dualflag
- 				  regionm_midwest regionm_missing regionm_northeast regionm_south regionm_west
-				  /*rank_edu_char_0 rank_edu_char_1 rank_edu_char_2 rank_edu_char_3 rank_edu_char_Missing*/
-				  rank_income_char_0 rank_income_char_1 rank_income_char_2 rank_income_char_3 rank_income_char_Missing
-				  cancer_type_bladder_cancer cancer_type_breast_cancer cancer_type_colorectal_cancer
-				  cancer_type_esophagus_cancer cancer_type_kidney_cancer cancer_type_lung_cancer
-				  cancer_type_ovary_cancer cancer_type_pancreas_cancer cancer_type_prostate_cancer
-				  cancer_type_stomach_cancer cancer_type_uterus_cancer
-				  number_prior_hospitalization number_prior_physician
-				  chemo				  
-/*				  init_yr_2010 init_yr_2011 init_yr_2012 init_yr_2013 init_yr_2014 init_yr_2015 init_yr_2016*/
-				  stage_stage_0 stage_stage_I stage_stage_II stage_stage_III stage_stage_IV stage_unknown
-				  grade_grade_I grade_grade_II grade_grade_III grade_grade_IV grade_T_cell_B_cell_cell_type_no
-				  tumor_size_0cm tumor_size_0cm___tumor_size___1c tumor_size_1cm___tumor_size___2c
-				  tumor_size_2cm___tumor_size___3c tumor_size_3cm___tumor_size___4c tumor_size_4cm___tumor_size___5c
-				  tumor_size_NA_Site_specific_code tumor_size_tumor_size___5cm
-				  
-				  CHF HT STT VD Dia AKF ALF bleed alcohol
-				  anemia asthma COPD dementia gout HL IA Other_IHD Other_CD PUD CR
-				  Home_O2 Osteoporotic_frac Walker Wheelchair Home_hosp_bed fall
-				  acei arb av antiarrhythmics antiplatelets aspirin bb ccb diuretics oa dd estrogens progestins hlmwh naid statins nlld ppi;
+%let covaraites = age sex hyptertension ckd liver stroke_se alcohol prior_bleeding diabetes chf 
+mi af inpatient_count outpatient_count acei arb av antiarrhythmics antiplatelets
+aspirin beta_blockers calcium_c_blockers diuretics other_antihyp heparin_lmwh nsaids nonstatin proton_p_inhibitors;
 
 
 
-proc psmatch data=comp_eff.event_12_new region=allobs;
-		class doac_flag sex maritalm dualflag chemo
-			  racem_black racem_hispanic racem_white racem_other
-			  regionm_midwest regionm_missing regionm_northeast regionm_south regionm_west
-			  cancer_type_bladder_cancer cancer_type_breast_cancer cancer_type_colorectal_cancer
-			  cancer_type_esophagus_cancer cancer_type_kidney_cancer cancer_type_lung_cancer
-			  cancer_type_ovary_cancer cancer_type_pancreas_cancer cancer_type_prostate_cancer
-			  cancer_type_stomach_cancer cancer_type_uterus_cancer
-/*			  init_yr_2010 init_yr_2011 init_yr_2012 init_yr_2013 init_yr_2014 init_yr_2015 init_yr_2016*/
-			  stage_stage_0 stage_stage_I stage_stage_II stage_stage_III stage_stage_IV stage_unknown
-			  grade_grade_I grade_grade_II grade_grade_III grade_grade_IV grade_T_cell_B_cell_cell_type_no
-			  tumor_size_0cm tumor_size_0cm___tumor_size___1c tumor_size_1cm___tumor_size___2c
-			  tumor_size_2cm___tumor_size___3c tumor_size_3cm___tumor_size___4c tumor_size_4cm___tumor_size___5c
-			  tumor_size_NA_Site_specific_code tumor_size_tumor_size___5cm 
-/*			  rank_edu_char_0 rank_edu_char_1 rank_edu_char_2 rank_edu_char_3 rank_edu_char_Missing*/
-			  rank_income_char_0 rank_income_char_1 rank_income_char_2 rank_income_char_3 rank_income_char_Missing
-			  CHF HT STT VD Dia AKF ALF bleed alcohol
-			  anemia asthma COPD dementia gout HL IA Other_IHD Other_CD PUD CR
-			  Osteoporotic_frac fall
-/*			  Home_O2  Walker Wheelchair Home_hosp_bed */
-			  acei arb av antiarrhythmics antiplatelets aspirin bb ccb diuretics oa dd estrogens progestins hlmwh naid statins nlld ppi;
-		psmodel doac_flag(treated='1')= &covaraites;
+proc psmatch data=mscan.analytical_cohort region=allobs;
+		class interacting sex hyptertension ckd liver stroke_se alcohol prior_bleeding diabetes chf 
+mi af inpatient_count outpatient_count acei arb av antiarrhythmics antiplatelets
+aspirin beta_blockers calcium_c_blockers diuretics other_antihyp heparin_lmwh nsaids nonstatin proton_p_inhibitors;
+		psmodel interacting(treated='1')= &covaraites;
 		assess lps var=(&covaraites)
 						/ varinfo nlargestwgt=6 plots=(barchart boxplot(display=(lps )) wgtcloud) weight=atewgt(stabilize=yes);
-output out(obs=all)=comp_eff.propensity_score atewgt(stabilize=yes)=_ATEWgt_;
+output out(obs=all)=mscan.propensity_score atewgt(stabilize=yes)=_ATEWgt_;
 run;
 proc univariate data=comp_eff.propensity_score; var _ps_; class doac_flag; histogram; run; /*propensity score*/
 proc univariate data=comp_eff.propensity_score; var _ATEWgt_; histogram; run; /*stabilized weights*/
