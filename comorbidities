@@ -777,3 +777,63 @@ data mscan.analytical_cohort;
     if (af_ip = 1 or af_op = 1) then af = 1; else af = 0;
     drop af_ip af_op;
 run;
+
+
+
+/*AIDS*/
+data flag_aids;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ("B20 "-"B222", "B24", "042"-"044")   or 
+        dx2 in: ("B20 "-"B222", "B24", "042"-"044")   or 
+        dx3 in: ("B20 "-"B222", "B24", "042"-"044")   or 
+        dx4 in: ("B20 "-"B222", "B24", "042"-"044")  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_aids nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data flag_aids_ip;
+    set mscan.inpatient;
+    if (0 <= (day0 - admdate) <=365) and (dx1 in: ("B20 "-"B222", "B24", "042"-"044")   or 
+        dx2 in: ("B20 "-"B222", "B24", "042"-"044")   or 
+        dx3 in: ("B20 "-"B222", "B24", "042"-"044")   or 
+        dx4 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx5 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx6 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx7 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx8 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx9 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx10 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx11 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx12 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx13 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx14 in: ("B20 "-"B222", "B24", "042"-"044")   or
+        dx15 in: ("B20 "-"B222", "B24", "042"-"044")  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_aids_ip nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_aids(in=b);
+    by enrolid;
+    if b then aids_op = 1;
+    else aids_op = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_aids_ip(in=b);
+    by enrolid;
+    if b then aids_ip = 1;
+    else aids_ip = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    set mscan.analytical_cohort;
+    if (aids_ip = 1 or aids_op = 1) then aids = 1; else aids = 0;
+    drop aids_ip aids_op;
+run;
