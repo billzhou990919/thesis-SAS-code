@@ -122,7 +122,7 @@ quit;
 
 /* Merging the count back with the original analytical_cohort dataset */
 proc sql;
-    create table mscan.analytical_cohort_test as
+    create table mscan.analytical_cohort as
     select a.*, coalesce(b.outpatient_count, 0) as outpatient_count_final
     from mscan.analytical_cohort as a
     left join final_count as b
