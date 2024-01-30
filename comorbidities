@@ -955,4 +955,61 @@ data mscan.analytical_cohort;
     drop solidtumor_ip solidtumor_op;
 run;
 
+/*cerebrovascular disease*/
+data flag_cerebro;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or 
+        dx2 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or 
+        dx3 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or 
+        dx4 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_cerebro nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data flag_cerebro_ip;
+    set mscan.inpatient;
+    if (0 <= (day0 - admdate) <=365) and (dx1 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or 
+        dx2 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or 
+        dx3 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or 
+        dx4 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx5 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx6 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx7 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx8 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx9 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx10 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx11 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx12 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx13 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx14 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')   or
+        dx15 in: ('C77','C78','C79','C800','C801','C802','196','197','198','1990','1991','1992')  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_cerebro_ip nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_cerebro(in=b);
+    by enrolid;
+    if b then cerebro_op = 1;
+    else cerebro_op = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_cerebro_ip(in=b);
+    by enrolid;
+    if b then cerebro_ip = 1;
+    else cerebro_ip = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    set mscan.analytical_cohort;
+    if (cerebro_ip = 1 or cerebro_op = 1) then cerebro = 1; else cerebro = 0;
+    drop cerebro_ip cerebro_op;
+run;
 
