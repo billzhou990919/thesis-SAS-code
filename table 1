@@ -43,6 +43,9 @@ PROC FREQ DATA=mscan.analytical_cohort;
     TABLES af* interacting;
 RUN;
 
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES aids* interacting;
+RUN;
 
 
 
