@@ -837,3 +837,122 @@ data mscan.analytical_cohort;
     if (aids_ip = 1 or aids_op = 1) then aids = 1; else aids = 0;
     drop aids_ip aids_op;
 run;
+
+
+/*Peptic Ulcer disease*/
+data flag_ulcer;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx2 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx3 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx4 in: ('K25','K26','K27','K28','531','532','533','534')  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_ulcer nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data flag_ulcer_ip;
+    set mscan.inpatient;
+    if (0 <= (day0 - admdate) <=365) and (dx1 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx2 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx3 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx4 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx5 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx6 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx7 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx8 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx9 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx10 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx11 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx12 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx13 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx14 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx15 in: ('K25','K26','K27','K28','531','532','533','534')  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_ulcer_ip nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_ulcer(in=b);
+    by enrolid;
+    if b then ulcer_op = 1;
+    else ulcer_op = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_ulcer_ip(in=b);
+    by enrolid;
+    if b then ulcer_ip = 1;
+    else ulcer_ip = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    set mscan.analytical_cohort;
+    if (ulcer_ip = 1 or ulcer_op = 1) then ulcer = 1; else ulcer = 0;
+    drop ulcer_ip ulcer_op;
+run;
+
+/*Solid tumor*/
+data flag_solidtumor;
+    set mscan.outpatient;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx2 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx3 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx4 in: ('K25','K26','K27','K28','531','532','533','534')  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_solidtumor nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data flag_solidtumor_ip;
+    set mscan.inpatient;
+    if (0 <= (day0 - admdate) <=365) and (dx1 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx2 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx3 in: ('K25','K26','K27','K28','531','532','533','534')   or 
+        dx4 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx5 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx6 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx7 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx8 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx9 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx10 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx11 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx12 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx13 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx14 in: ('K25','K26','K27','K28','531','532','533','534')   or
+        dx15 in: ('K25','K26','K27','K28','531','532','533','534')  ) then flag = 1;
+    else flag = 0;
+    keep enrolid flag;
+run;
+proc sort data=flag_solidtumor_ip nodupkey;
+    by enrolid;
+    where flag = 1;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_solidtumor(in=b);
+    by enrolid;
+    if b then solidtumor_op = 1;
+    else solidtumor_op = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) flag_solidtumor_ip(in=b);
+    by enrolid;
+    if b then solidtumor_ip = 1;
+    else solidtumor_ip = 0;
+    drop flag;
+run;
+data mscan.analytical_cohort;
+    set mscan.analytical_cohort;
+    if (solidtumor_ip = 1 or solidtumor_op = 1) then solidtumor = 1; else solidtumor = 0;
+    drop solidtumor_ip solidtumor_op;
+run;
+
+
