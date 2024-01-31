@@ -17,7 +17,7 @@ proc sort data=benesum&yr; by enrolid; run;
 Proc sql;
 create table  benesum&yr._1 as
 select a.enrolid, a.BUYIN_&yr
-from benesum&yr as a, mscan.exclude18 as b
+from benesum&yr as a, mscan.exclude_18 as b
 where a.enrolid = b.enrolid;
 quit;
 
@@ -44,7 +44,7 @@ run;
 Proc sql;
 create table raw_cohort1 as
 select * 
-from  benesum_2010_2019 as a,  mscan.exclude18 as b
+from  benesum_2010_2019 as a,  mscan.exclude_18 as b
 where a.enrolid = b.enrolid;
 quit;
 
