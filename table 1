@@ -46,6 +46,30 @@ RUN;
 PROC FREQ DATA=mscan.analytical_cohort;
     TABLES aids* interacting;
 RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES ulcer* interacting;
+RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES solidtumor* interacting;
+RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES cerebro* interacting;
+RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES copd* interacting;
+RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES dementia* interacting;
+RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES malignancy* interacting;
+RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES rheumatologic* interacting;
+RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES paralysis* interacting;
+RUN;
 
 
 
