@@ -1,7 +1,7 @@
 data mscan.all_enrollment;
     set mscan.all_enrollment_2014 mscan.all_enrollment_2015 mscan.all_enrollment_2016 mscan.all_enrollment_2017 mscan.all_enrollment_2018 mscan.all_enrollment_2019;
     keep enrolid year 
-         enrind01-enrind12 
+         enrind01-enrind12;
 run;
 
 
