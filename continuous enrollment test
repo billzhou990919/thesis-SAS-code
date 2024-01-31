@@ -1,72 +1,67 @@
-data cms.all_mbsf;
-    set cms.mbsf2014 cms.mbsf2015 cms.mbsf2016 cms.mbsf2017 cms.mbsf2018 cms.mbsf2019;
-    keep bene_id bene_enrollmt_ref_yr 
-         mdcr_entlmt_buyin_ind_01-mdcr_entlmt_buyin_ind_12 
-         hmo_ind_01-hmo_ind_12 
-         ptc_pbp_id_01-ptc_pbp_id_12 
-         ptd_cntrct_id_01-ptd_cntrct_id_12;
+data mscan.all_mbsf;
+    set mscan.mbsf2014 mscan.mbsf2015 mscan.mbsf2016 mscan.mbsf2017 mscan.mbsf2018 mscan.mbsf2019;
+    keep enrolid year 
+         enrind01-enrind12 
 run;
 
 
 **CONTINUOUS ENROLLMENT;
 %macro _5pbenesum( yr, indata);
-data benesum&yr (keep = bene_id mdcr_entlmt_buyin_ind_01-mdcr_entlmt_buyin_ind_12 hmo_ind_01-hmo_ind_12  HMOIND_&yr BUYIN_&yr);
-  set cms.&indata;
-  HMOIND_&yr = compress(hmo_ind_01||hmo_ind_02||hmo_ind_03||hmo_ind_04||hmo_ind_05||hmo_ind_06||hmo_ind_07||hmo_ind_08||hmo_ind_09||hmo_ind_10||hmo_ind_11||hmo_ind_12, " ");
-  BUYIN_&yr = compress(mdcr_entlmt_buyin_ind_01||mdcr_entlmt_buyin_ind_02||mdcr_entlmt_buyin_ind_03||mdcr_entlmt_buyin_ind_04||mdcr_entlmt_buyin_ind_05||mdcr_entlmt_buyin_ind_06||mdcr_entlmt_buyin_ind_07||mdcr_entlmt_buyin_ind_08||mdcr_entlmt_buyin_ind_09||mdcr_entlmt_buyin_ind_10||mdcr_entlmt_buyin_ind_11||mdcr_entlmt_buyin_ind_12, " ");
+data benesum&yr (keep = enrolid enrind01-enrind12 BUYIN_&yr);
+  set mscan.&indata;
+  BUYIN_&yr = compress(enrind01||enrind02||enrind03||enrind04||enrind05||enrind06||enrind07||enrind08||enrind09||enrind10||enrind11||enrind12, " ");
 run;
 
-proc sort data=benesum&yr; by bene_id; run;
+proc sort data=benesum&yr; by enrolid; run;
 
 Proc sql;
 create table  benesum&yr._1 as
-select a.bene_id, a.HMOIND_&yr, a.BUYIN_&yr
-from benesum&yr as a, cms.nopriorpd as b
-where a.bene_id = b.bene_id;
+select a.enrolid, a.BUYIN_&yr
+from benesum&yr as a, mscan.exclude18 as b
+where a.enrolid = b.enrolid;
 quit;
 
-Proc sort data = benesum&yr._1 nodupkey; by bene_id; run;
+Proc sort data = benesum&yr._1 nodupkey; by enrolid; run;
 
 %mend _5pbenesum;
 
+%_5pbenesum (2010, mbsf2010);	
+%_5pbenesum (2011, mbsf2011);	
+%_5pbenesum (2012, mbsf2012);	
+%_5pbenesum (2013, mbsf2013);		
+%_5pbenesum (2014, mbsf2014);	
 %_5pbenesum (2015, mbsf2015);	
 %_5pbenesum (2016, mbsf2016);	
 %_5pbenesum (2017, mbsf2017);	
 %_5pbenesum (2018, mbsf2018);		
 %_5pbenesum (2019, mbsf2019);			
 
-data benesum_2015_2019 ;				
-  merge benesum2015_1 benesum2016_1 benesum2017_1 benesum2018_1 benesum2019_1;
-  by bene_id;
+data benesum_2010_2019 ;				
+  merge benesum2010_1 benesum2011_1 benesum2012_1 benesum2013_1 benesum2014_1 benesum2015_1 benesum2016_1 benesum2017_1 benesum2018_1 benesum2019_1;
+  by enrolid;
 run;
 
 Proc sql;
 create table raw_cohort1 as
 select * 
-from  benesum_2015_2019 as a,  cms.nopriorpd as b
-where a.bene_id = b.bene_id;
+from  benesum_2010_2019 as a,  mscan.exclude18 as b
+where a.enrolid = b.enrolid;
 quit;
 
 data  raw_cohort2; 
   set raw_cohort1;
+	BUYIN = BUYIN_2010||BUYIN_2011||BUYIN_2012||BUYIN_2013||BUYIN_2014||BUYIN_2015||BUYIN_2016||BUYIN_2017||BUYIN_2018||BUYIN_2019;
 
-   HMOIND = HMOIND_2015||HMOIND_2016||HMOIND_2017||HMOIND_2018||HMOIND_2019;
-   BUYIN = BUYIN_2015||BUYIN_2016||BUYIN_2017||BUYIN_2018||BUYIN_2019;
+	continuous365 = 0;									
 
-	PartAB365 = 0;						
-	HMO365=0;				
-
-    Start  = (year(index_date)-2015)*12 + month(index_date) -12;
-	end  = (year(index_date)-2015)*12 + month(index_date) - 1;
+    Start  = (year(index_date)-2010)*12 + month(index_date) -12;
+	end  = (year(index_date)-2010)*12 + month(index_date) - 1;
 
 	**365 days prior to index date;
-	do i = start to end until (substr (BUYIN,i,1) not in ("3","C"));
-			if substr(BUYIN,i,1)in ("3","C")then PartAB365 + 1; end;
+	do i = start to end until (substr (BUYIN,i,1) not in ('1'));
+			if substr(BUYIN,i,1)in ('1')then continuous365 + 1; end;
 
-	do j=start to end until (substr(HMOIND,j,1)not in ("0"));
-		if substr(HMOIND,j,1) in ("0")then HMO365+1; end;	
-
-	if partAB365 = (end-start)+1 and hmo365 = (end-start) + 1 then cont_12mon = 1; else cont_12mon = 0;
+	if continuous365 = (end-start)+1 then cont_12mon = 1; else cont_12mon = 0;
 
 run;
 
