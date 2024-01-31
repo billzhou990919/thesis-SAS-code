@@ -29,8 +29,8 @@ run;
 /*Trimming at 1st and 99th percentile*/
 data mscan.propensity_score_trimmed; 
 set mscan.propensity_score; 
-if 0< _ATEWgt_ < 0.510683 then _ATEWgt_=0.510683; 
-if _ATEWgt_ > 2.891309 then _ATEWgt_=2.891309; 
+if 0< _ATEWgt_ < 0.839846 then _ATEWgt_=0.839846; 
+if _ATEWgt_ > 1.185485 then _ATEWgt_=1.185485; 
 if _ATEWgt_=. then delete; 
 run;
 proc sgplot data=mscan.propensity_score_trimmed;       
