@@ -3,16 +3,16 @@
 proc univariate data=mscan.analytical_cohort; var survival_time; histogram; run;
 
 %let covaraites = age sex hyptertension ckd liver stroke_se alcohol prior_bleeding diabetes chf 
-mi af inpatient_count outpatient_count acei arb av antiarrhythmics antiplatelets
+mi af inpatient_count outpatient_count_final aids ulcer solidtumor cerebro copd dementia malignancy rheumatologic paralysis acei arb av antiarrhythmics antiplatelets
 aspirin beta_blockers calcium_c_blockers diuretics other_antihyp heparin_lmwh nsaids nonstatin proton_p_inhibitors;
 
 
 
 proc psmatch data=mscan.analytical_cohort region=allobs;
 		class interacting sex hyptertension ckd liver stroke_se alcohol prior_bleeding diabetes chf 
-mi af inpatient_count outpatient_count acei arb av antiarrhythmics antiplatelets
+mi af aids ulcer solidtumor cerebro copd dementia malignancy rheumatologic paralysis acei arb av antiarrhythmics antiplatelets
 aspirin beta_blockers calcium_c_blockers diuretics other_antihyp heparin_lmwh nsaids nonstatin proton_p_inhibitors;
-		psmodel interacting(treated='1')= &covaraites;
+		psmodel interacting(treated='1')= age inpatient_count outpatient_count_final;
 		assess lps var=(&covaraites)
 						/ varinfo nlargestwgt=6 plots=(barchart boxplot(display=(lps )) wgtcloud) weight=atewgt(stabilize=yes);
 output out(obs=all)=mscan.propensity_score atewgt(stabilize=yes)=_ATEWgt_;
