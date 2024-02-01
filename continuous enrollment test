@@ -1,15 +1,9 @@
-data mscan.all_enrollment;
-    set mscan.all_enrollment_2014 mscan.all_enrollment_2015 mscan.all_enrollment_2016 mscan.all_enrollment_2017 mscan.all_enrollment_2018 mscan.all_enrollment_2019;
-    keep enrolid year 
-         enrind01-enrind12;
-run;
-
 
 **CONTINUOUS ENROLLMENT;
 %macro _5pbenesum( yr, indata);
-data benesum&yr (keep = enrolid enrind01-enrind12 BUYIN_&yr);
+data benesum&yr (keep = enrolid enrind1-enrind12 BUYIN_&yr);
   set mscan.&indata;
-  BUYIN_&yr = compress(enrind01||enrind02||enrind03||enrind04||enrind05||enrind06||enrind07||enrind08||enrind09||enrind10||enrind11||enrind12, " ");
+  BUYIN_&yr = compress(enrind1||enrind2||enrind3||enrind4||enrind5||enrind6||enrind7||enrind8||enrind9||enrind10||enrind11||enrind12, " ");
 run;
 
 proc sort data=benesum&yr; by enrolid; run;
@@ -54,8 +48,8 @@ data  raw_cohort2;
 
 	continuous365 = 0;									
 
-    Start  = (year(index_date)-2010)*12 + month(index_date) -12;
-	end  = (year(index_date)-2010)*12 + month(index_date) - 1;
+    Start  = (year(day0)-2010)*12 + month(day0) -12;
+	end  = (year(day0)-2010)*12 + month(day0) - 1;
 
 	**365 days prior to index date;
 	do i = start to end until (substr (BUYIN,i,1) not in ('1'));
