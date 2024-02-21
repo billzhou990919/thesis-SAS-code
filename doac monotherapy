@@ -1,6 +1,6 @@
 data mscan.all_doac_claims2;
     set 
-	      mscan.all_doac_2010 (in=in1);
+	      mscan.all_doac_2010 (in=in1)
         mscan.all_doac_claims(in=in2);
     if enrolid ne .;
 run;
@@ -73,3 +73,29 @@ Data mscan.common_doac;
     Set mscan.common_doac;
     If daysupp > 0;
 Run;
+
+
+
+
+proc sql;
+    create table work.earliest_svcdate as 
+    select a.enrolid, 
+           min(b.svcdate) as earliest_svcdate
+    from mscan.analytical_cohort as a
+    left join mscan.common_doac as b
+    on a.enrolid = b.enrolid
+    and a.first_letter_doac = upcase(substr(b.drugname, 1, 1))
+    group by a.enrolid;
+quit;
+
+data mscan.analytical_cohort;
+    merge mscan.analytical_cohort(in=a) work.earliest_svcdate(in=b);
+    by enrolid;
+    if a;
+run;
+
+data mscan.analytical_cohort;
+    set mscan.analytical_cohort;
+    doac_mon=day0-earliest_svcdate;
+run;
+
