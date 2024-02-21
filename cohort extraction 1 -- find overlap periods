@@ -1,4 +1,9 @@
 /*getting all doac claims*/
+proc sql;
+    create table mscan.all_doac_2010 as
+    select * from source.ccaed103
+    where ndcnum in (select ndcnum from mscan.ndc_doac);
+quit;
 
 proc sql;
     create table mscan.all_doac_2011 as
@@ -126,15 +131,16 @@ run;
 
 data mscan.all_doac_claims;
     set 
-        mscan.all_doac_2011 (in=in1) 
-        mscan.all_doac_2012 (in=in2)
-        mscan.all_doac_2013 (in=in3)
-        mscan.all_doac_2014 (in=in4)
-        mscan.all_doac_2015 (in=in5)
-        mscan.all_doac_2016 (in=in6)
-        mscan.all_doac_2017 (in=in7)
-        mscan.all_doac_2018 (in=in8)
-        mscan.all_doac_2019 (in=in9);
+	mscan.all_doac_2010 (in=in1)
+        mscan.all_doac_2011 (in=in2) 
+        mscan.all_doac_2012 (in=in3)
+        mscan.all_doac_2013 (in=in4)
+        mscan.all_doac_2014 (in=in5)
+        mscan.all_doac_2015 (in=in6)
+        mscan.all_doac_2016 (in=in7)
+        mscan.all_doac_2017 (in=in8)
+        mscan.all_doac_2018 (in=in9)
+        mscan.all_doac_2019 (in=in10);
     if enrolid ne .;
 run;
 
