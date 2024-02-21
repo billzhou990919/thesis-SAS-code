@@ -1,0 +1,75 @@
+data mscan.all_doac_claims2;
+    set 
+	      mscan.all_doac_2010 (in=in1);
+        mscan.all_doac_claims(in=in2);
+    if enrolid ne .;
+run;
+
+/*find common enrolid among all_doac_claims and all_statin*/
+proc sql;
+    create table mscan.common_unique_enrolids as
+    select distinct a.enrolid
+    from mscan.all_doac_claims2 as a, mscan.all_statin as b
+    where a.enrolid = b.enrolid;
+quit;
+
+/*use common enrolid to extract doac and statin claims*/
+Proc sql;
+	Create table mscan.common_doac as
+	Select * from mscan.all_doac_claims2 where enrolid in (select enrolid from mscan.common_unique_enrolids);
+Quit;
+Proc sql;
+	Create table mscan.common_statin as
+	Select * from mscan.all_statin where enrolid in (select enrolid from mscan.common_unique_enrolids);
+Quit;
+
+/*add drug name to common_doac and common_statin*/
+proc sort data=mscan.common_doac;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_doac;
+    by ndcnum;
+run;
+data mscan.common_doac;
+    merge mscan.common_doac (in=a)
+          mscan.ndc_doac (in=b keep=ndcnum thrdtds rename=(thrdtds=drugname));
+    by ndcnum;
+    if a;
+Run;
+
+proc sort data=mscan.common_statin ;
+    by ndcnum;
+run;
+proc sort data=mscan.ndc_statin;
+    by ndcnum;
+run;
+data mscan.common_statin;
+    merge mscan.common_statin (in=a)
+          mscan.ndc_statin (in=b keep=ndcnum thrdtds rename=(thrdtds=drugname));
+    by ndcnum;
+    if a;
+Run;
+
+/*add end date for each drug dispensing*/
+Data mscan.common_statin;
+    Set mscan.common_statin;
+    Enddate = svcdate + daysupp;
+    Format enddate mmddyy10.;
+Run;
+
+Data mscan.common_doac;
+    Set mscan.common_doac;
+    Enddate = svcdate + daysupp;
+    Format enddate mmddyy10.;
+Run;
+
+/*delete those with days supply <= 0*/
+Data mscan.common_statin;
+    Set mscan.common_statin;
+    If daysupp > 0;
+Run;
+
+Data mscan.common_doac;
+    Set mscan.common_doac;
+    If daysupp > 0;
+Run;
