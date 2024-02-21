@@ -70,7 +70,15 @@ RUN;
 PROC FREQ DATA=mscan.analytical_cohort;
     TABLES paralysis* interacting;
 RUN;
-
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES vte* interacting;
+RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES cad* interacting;
+RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES pvd* interacting;
+RUN;
 
 
 PROC FREQ DATA=mscan.analytical_cohort;
