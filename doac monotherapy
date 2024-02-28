@@ -74,6 +74,57 @@ Data mscan.common_doac;
     If daysupp > 0;
 Run;
 
+data _null_;
+    set mscan.doac_refills_within_year   nobs=nobs_var;
+    call symput('obs_count', nobs_var);
+    stop;
+run;
+
+proc sql noprint;
+    select count(distinct enrolid) into :unique_patients
+    from mscan.doac_refills_within_year  ;
+quit;
+
+%put Number of Observations: &obs_count;
+%put Number of Unique Patients (enrolid): &unique_patients;
+
+
+proc sql;
+   create table mscan.doac_refills_within_year as
+   select a.enrolid, b.daysupp, b.drugname, b.svcdate
+   from mscan.analytical_cohort as a
+   inner join mscan.common_doac as b
+   on a.enrolid = b.enrolid
+   where (a.day0 - 365) <= b.svcdate < a.day0
+   and upcase(substr(b.drugname, 1, 1)) = a.first_letter_doac;
+quit;
+/* Sum up daysupp for each enrolid */
+proc sql;
+   create table mscan.sum_daysupp_per_enrolid as
+   select enrolid, sum(daysupp) as total_daysupp
+   from mscan.doac_refills_within_year
+   group by enrolid;
+quit;
+
+data mscan.analytical_cohort;
+   merge mscan.analytical_cohort(in=a)
+         mscan.sum_daysupp_per_enrolid(in=b);
+         by enrolid;
+   if a and b then daysuppsum = total_daysupp; /* Case with matching enrolid */
+   if a; /* Ensures we're only outputting records from the analytical_cohort dataset */
+run;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -87,6 +138,10 @@ proc sql;
     and a.first_letter_doac = upcase(substr(b.drugname, 1, 1))
     group by a.enrolid;
 quit;
+
+
+
+
 
 data mscan.analytical_cohort;
     merge mscan.analytical_cohort(in=a) work.earliest_svcdate(in=b);
