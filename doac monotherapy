@@ -71,7 +71,7 @@ Run;
 
 Data mscan.common_doac;
     Set mscan.common_doac;
-    If daysupp > 0;
+    If 0 < daysupp < 300;
 Run;
 
 data _null_;
