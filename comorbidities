@@ -1566,60 +1566,60 @@ data mscan.analytical_cohort;
 run;
 
 
-/*dyslipidemia*/
-data flag_dyslipidemia;
+/*hyperlipidemia*/
+data flag_hyperlipidemia;
     set mscan.outpatient;
-    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or 
-        dx2 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or 
-        dx3 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or 
-        dx4 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')  ) then flag = 1;
+    if (0 <= (day0 - svcdate) <=365) and (dx1 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or 
+        dx2 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or 
+        dx3 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or 
+        dx4 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')  ) then flag = 1;
     else flag = 0;
     keep enrolid flag;
 run;
-proc sort data=flag_dyslipidemia nodupkey;
+proc sort data=flag_hyperlipidemia nodupkey;
     by enrolid;
     where flag = 1;
 run;
-data flag_dyslipidemia_ip;
+data flag_hyperlipidemia_ip;
     set mscan.inpatient;
-    if (0 <= (day0 - admdate) <=365) and (dx1 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or 
-        dx2 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or 
-        dx3 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or 
-        dx4 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx5 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx6 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx7 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx8 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx9 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx10 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx11 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx12 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx13 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx14 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')   or
-        dx15 in: ('2720','2721','2722','2723','2724','E780','E781','E782','E784','E784','E785')  ) then flag = 1;
+    if (0 <= (day0 - admdate) <=365) and (dx1 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or 
+        dx2 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or 
+        dx3 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or 
+        dx4 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx5 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx6 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx7 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx8 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx9 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx10 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx11 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx12 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx13 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx14 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')   or
+        dx15 in: ('2720','2721','2722','2723','2724','E780','E7800','E7801','E781','E782','E783','E784','E7841','E78419','E785')  ) then flag = 1;
     else flag = 0;
     keep enrolid flag;
 run;
-proc sort data=flag_dyslipidemia_ip nodupkey;
+proc sort data=flag_hyperlipidemia_ip nodupkey;
     by enrolid;
     where flag = 1;
 run;
 data mscan.analytical_cohort;
-    merge mscan.analytical_cohort(in=a) flag_dyslipidemia(in=b);
+    merge mscan.analytical_cohort(in=a) flag_hyperlipidemia(in=b);
     by enrolid;
-    if b then dyslipidemia_op = 1;
-    else dyslipidemia_op = 0;
+    if b then hyperlipidemia_op = 1;
+    else hyperlipidemia_op = 0;
     drop flag;
 run;
 data mscan.analytical_cohort;
-    merge mscan.analytical_cohort(in=a) flag_dyslipidemia_ip(in=b);
+    merge mscan.analytical_cohort(in=a) flag_hyperlipidemia_ip(in=b);
     by enrolid;
-    if b then dyslipidemia_ip = 1;
-    else dyslipidemia_ip = 0;
+    if b then hyperlipidemia_ip = 1;
+    else hyperlipidemia_ip = 0;
     drop flag;
 run;
 data mscan.analytical_cohort;
     set mscan.analytical_cohort;
-    if (dyslipidemia_ip = 1 or dyslipidemia_op = 1) then dyslipidemia = 1; else dyslipidemia = 0;
-    drop dyslipidemia_ip dyslipidemia_op;
+    if (hyperlipidemia_ip = 1 or hyperlipidemia_op = 1) then hyperlipidemia = 1; else hyperlipidemia = 0;
+    drop hyperlipidemia_ip hyperlipidemia_op;
 run;
