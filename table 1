@@ -79,6 +79,9 @@ RUN;
 PROC FREQ DATA=mscan.analytical_cohort;
     TABLES pvd* interacting;
 RUN;
+PROC FREQ DATA=mscan.analytical_cohort;
+    TABLES hyperlipidemia* interacting;
+RUN;
 
 
 PROC FREQ DATA=mscan.analytical_cohort;
