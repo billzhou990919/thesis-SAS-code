@@ -2,6 +2,10 @@ PROC MEANS DATA=mscan.analytical_cohort MIN MAX MEAN MEDIAN STD Q1 Q3;
 Class interacting;
     VAR age;
 RUN;
+PROC MEANS DATA=mscan.analytical_cohort MIN MAX MEAN MEDIAN STD Q1 Q3;
+Class interacting;
+    VAR daysuppsum;
+RUN;
 
 PROC FREQ DATA=mscan.analytical_cohort;
     TABLES hyptertension* interacting;
