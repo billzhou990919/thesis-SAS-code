@@ -135,3 +135,56 @@ data mscan.overlap_period_2010;
 run;
 
 
+/* Sort the data by enrolid and overlap_end in descending order */
+proc sort data=mscan.overlap_period_2010;
+    by enrolid descending overlap_end;
+run;
+
+/* Create a new dataset with the largest overlap_end for each enrolid */
+data mscan.unique_enrolid_maxend2010;
+    set mscan.overlap_period_2010;
+    by enrolid;
+    /* Select the first record for each enrolid, which is the one with the largest overlap_end due to the sorting */
+    if first.enrolid;
+    /* Keep the enrolid and the overlap_end fields */
+    keep enrolid overlap_end;
+run;
+
+
+/* Merge the dataset containing max overlap_end with the analytical cohort */
+proc sql;
+    create table mscan.analytical_cohort_filtered as
+    select a.*, b.overlap_end
+    from mscan.analytical_cohort_primary as a
+    left join mscan.unique_enrolid_maxend2010 as b
+    on a.enrolid = b.enrolid;
+quit;
+
+/* Exclude individuals where max overlap_end is within 1 year prior to day0 */
+data mscan.analytical_cohort_final;
+    set mscan.analytical_cohort_filtered;
+    /* Assuming day0 and overlap_end are SAS date values */
+    if intck('year', overlap_end, day0) > -1 then delete;
+    /* Keep all original variables from analytical_cohort_primary, remove overlap_end if not needed */
+    drop overlap_end;
+run;
+
+proc sql;
+    create table mscan.analytical_cohort_filtered_2wk as
+    select a.*, b.overlap_end
+    from mscan.analytical_cohort_primary_2wk as a
+    left join mscan.unique_enrolid_maxend2010 as b
+    on a.enrolid = b.enrolid;
+quit;
+
+/* Exclude individuals where max overlap_end is within 1 year prior to day0 */
+data mscan.analytical_cohort_final_2wk;
+    set mscan.analytical_cohort_filtered_2wk;
+    /* Assuming day0 and overlap_end are SAS date values */
+    if intck('year', overlap_end, day0) > -1 then delete;
+    /* Keep all original variables from analytical_cohort_primary, remove overlap_end if not needed */
+    drop overlap_end;
+run;
+
+
+
