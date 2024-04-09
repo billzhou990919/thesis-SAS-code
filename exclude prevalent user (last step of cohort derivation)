@@ -1,1 +1,10 @@
-
+proc sql;
+    create table mscan.all_doac_2010 as
+    select enrolid, ndcnum, svcdate, daysupp from source.ccaed103
+    where ndcnum in (select ndcnum from mscan.ndc_doac);
+quit;
+proc sql;
+    create table mscan.all_statin_2010 as
+    select enrolid, ndcnum, svcdate, daysupp from source.ccaed103
+    where ndcnum in (select ndcnum from mscan.ndc_statin);
+quit;
