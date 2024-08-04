@@ -201,8 +201,91 @@ data cms.earliest_claimsv2;
     if a;  
 Run;
 
-data cms.exclude65_diabtes;
+data cms.exclude65_diabetes;
     set cms.earliest_claimsv2;
     age = int((clm_from_dt - bene_birth_dt)/365.25);
     if age >= 66;
+run;
+
+data cms.all_diabetes_drugs_2014;
+    set partd14.pde_file_2014(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+    where bene_id in (select bene_id from cms.exclude65_diabetes);
+Run;
+/*getting all diabetes_drugs claims in 2015*/
+data cms.all_diabetes_drugs_2015;
+    set partd15.pde_file_2015(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+    where bene_id in (select bene_id from cms.exclude65_diabetes);
+Run;
+/*getting all diabetes_drugs claims in 2016*/
+data cms.all_diabetes_drugs_20162;
+    set partd16.pde_file_2016(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+    where bene_id in (select bene_id from cms.exclude65_diabetes);
+Run;
+/*getting all diabetes_drugs claims in 2017*/
+data cms.all_diabetes_drugs_2017;
+    set partd17.pde_file_2017(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+    where bene_id in (select bene_id from cms.exclude65_diabetes);
+run;
+/*getting all diabetes_drugs claims in 2018*/
+data cms.all_diabetes_drugs_2018;
+    set partd18.pde_file_2018(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+    where bene_id in (select bene_id from cms.exclude65_diabetes);
+Run;
+
+/*getting all diabetes_drugs claims in 2019*/
+data cms.all_diabetes_drugs_2019;
+    set partd19.pde_file_2019(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+    where bene_id in (select bene_id from cms.exclude65_diabetes);
+Run;
+
+data cms.alldiabetesdrugs;
+    set cms.all_diabetes_drugs_2014 cms.all_diabetes_drugs_2015 cms.all_diabetes_drugs_2016 cms.all_diabetes_drugs_2017 cms.all_diabetes_drugs_2018 cms.all_diabetes_drugs_2019;
+run;
+
+data cms.alldiabetesdrug;
+  set cms.alldiabetesdrugs;
+  if upcase(gnn) in: ('METFORMIN', 'ALOGLIPTIN', 'LINAGLIPTIN', 'SAXAGLIPTIN', 'SITAGLIPTIN', 'DULAGLUTIDE', 'EXENATIDE', 'LIRAGLUTIDE', 'LIXISENATIDE', 'SEMAGLUTIDE', 'TIRZEPATIDE', 
+'BEXAGLIFLOZIN', 'CANAGLIFLOZIN', 'DAPAGLIFLOZIN', 'EMPAGLIFLOZIN', 'GLIMEPIRIDE', 'GLIPIZIDE', 'GLYBURIDE', 'ROSIGLITAZONE', 'PIOGLITAZONE');
+run;
+
+/* Step 1: Sort both datasets by bene_id and clm_from_dt */
+proc sort data=cms.alldiabetesdrugs;
+    by bene_id srvc_dt;
+run;
+
+proc sort data=cms.exclude65_diabetes;
+    by bene_id clm_from_dt;
+run;
+
+/* Step 2: Merge datasets */
+data merged_claims;
+    merge cms.alldiabetesdrugs (in=a) cms.exclude65_diabetes (in=b);
+    by bene_id;
+    if a and b; /* Keep only records that are in both datasets */
+run;
+
+/* Step 3: Filter for first drug claim on or after the earliest claim date */
+data cms.first_drug_claims;
+    set merged_claims;
+    by bene_id;
+    if srvc_dt >= clm_from_dt; /* Assuming clm_from_dt from earliest_claims is renamed to clm_from_dt1 */
+    if first.bene_id; /* Keep only the first occurrence after the earliest claim date */
+run;
+
+
+
+data cms.first_drug_claimsv2;
+  set cms.first_drug_claims;
+  metformin = 0;
+  dpp4 = 0;
+  glp1 = 0;
+  sglt2 = 0;
+  sulf = 0;
+  tzd = 0;
+  if upcase(gnn) in: ('METFORMIN') then metformin = 1;
+  if upcase(gnn) in: ('ALOGLIPTIN', 'LINAGLIPTIN', 'SAXAGLIPTIN', 'SITAGLIPTIN') then dpp4 = 1;
+  if upcase(gnn) in: ('DULAGLUTIDE', 'EXENATIDE', 'LIRAGLUTIDE', 'LIXISENATIDE', 'SEMAGLUTIDE', 'TIRZEPATIDE') then glp1 = 1;
+  if upcase(gnn) in: ('BEXAGLIFLOZIN', 'CANAGLIFLOZIN', 'DAPAGLIFLOZIN', 'EMPAGLIFLOZIN') then sglt2 = 1;
+  if upcase(gnn) in: ('GLIMEPIRIDE', 'GLIPIZIDE', 'GLYBURIDE') then sulf = 1;
+  if upcase(gnn) in: ('ROSIGLITAZONE', 'PIOGLITAZONE') then tzd = 1;
 run;
