@@ -134,3 +134,75 @@ Data cms.all_diabetes;
 Set cms.all_ip_diabetes_2015 cms.all_ip_diabetes_2016 cms.all_ip_diabetes_2017 cms.all_ip_diabetes_2018 cms.all_ip_diabetes_2019 cms.all_op_diabetes_2015 cms.all_op_diabetes_2016 cms.all_op_diabetes_2017 cms.all_op_diabetes_2018 cms.all_op_diabetes_2019;
 KEEP bene_id clm_from_dt;
 Run;
+
+proc sort data=cms.all_diabetes;
+    by bene_id clm_from_dt;
+run;
+
+data cms.earliest_claims;
+    set cms.all_diabetes;
+    by bene_id clm_from_dt;
+    if first.bene_id;
+run;
+
+proc sql;
+    create table cms.mbsf_diabetes2014 as
+    select * from mbsf14.mbsf_abcd_summary_2014
+    where bene_id in (select bene_id from cms.earliest_claims);
+Quit;
+proc sql;
+    create table cms.mbsf_diabetes2015 as
+    select * from mbsf15.mbsf_abcd_summary_2015
+    where bene_id in (select bene_id from cms.earliest_claims);
+Quit;
+proc sql;
+    create table cms.mbsf_diabetes2016 as
+    select * from mbsf16.mbsf_abcd_summary_2016
+    where bene_id in (select bene_id from cms.earliest_claims);
+Quit;
+proc sql;
+    create table cms.mbsf_diabetes2017 as
+    select * from mbsf17.mbsf_abcd_summary_2017
+    where bene_id in (select bene_id from cms.earliest_claims);
+Quit;
+proc sql;
+    create table cms.mbsf_diabetes2018 as
+    select * from mbsf18.mbsf_abcd_summary_2018
+    where bene_id in (select bene_id from cms.earliest_claims);
+Quit;
+proc sql;
+    create table cms.mbsf_diabetes2019 as
+    select * from mbsf19.mbsf_abcd_summary_2019
+    where bene_id in (select bene_id from cms.earliest_claims);
+Quit;
+
+Data cms.mbsf_diabetes;
+Set cms.mbsf_diabetes2015 cms.mbsf_diabetes2016 cms.mbsf_diabetes2017 cms.mbsf_diabetes2018 cms.mbsf_diabetes2019;
+run;
+
+/*getting rid of those who are not in the 20% sample group*/
+Data cms.mbsf_diabetes;
+Set cms.mbsf_diabetes;
+Where sample_group ne ‘ ‘;
+Run;
+
+proc sort data=cms.mbsf_diabetes nodupkey;
+    by bene_id;
+run;
+
+proc sort data=cms.earliest_claims;
+    by bene_id;
+run;
+/*add birth date from mbsf to drug claims file*/
+data cms.earliest_claimsv2;
+    merge cms.earliest_claims(in=a) cms.mbsf_diabetes(in=b);
+    by bene_id;
+    birth_date = bene_birth_dt;
+    if a;  
+Run;
+
+data cms.exclude65_diabtes;
+    set cms.earliest_claimsv2;
+    age = int((clm_from_dt - bene_birth_dt)/365.25);
+    if age >= 66;
+run;
