@@ -1,0 +1,136 @@
+/*exclude previous diabetes disease dx */
+Data cms.all_op_diabetes_2015;
+Set op15.outpatient_base_claims_k_2015;
+Where prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+Data cms.all_op_diabetes_2016;
+Set op16.outpatient_base_claims_k_2016;
+Where prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+Data cms.all_op_diabetes_2017;
+Set op17.outpatient_base_claims_k_2017;
+Where prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+Data cms.all_op_diabetes_2018;
+Set op18.outpatient_base_claims_k_2018;
+Where prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+Data cms.all_op_diabetes_2019;
+Set op19.outpatient_base_claims_2019;
+Where prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+Data cms.all_ip_diabetes_2015;
+Set ip15.inpatient_base_claims_k_2015;
+Where admtg_dgns_cd in: ("250","3620","E10","E11") or prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+Data cms.all_ip_diabetes_2016;
+Set ip16.inpatient_base_claims_k_2016;
+Where admtg_dgns_cd in: ("250","3620","E10","E11") or prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+Data cms.all_ip_diabetes_2017;
+Set ip17.inpatient_base_claims_k_2017;
+Where admtg_dgns_cd in: ("250","3620","E10","E11") or prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+Data cms.all_ip_diabetes_2018;
+Set ip18.inpatient_base_claims_k_2018;
+Where admtg_dgns_cd in: ("250","3620","E10","E11") or prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+Data cms.all_ip_diabetes_2019;
+Set ip19.inpatient_base_claims_2019;
+Where admtg_dgns_cd in: ("250","3620","E10","E11") or prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
+icd_dgns_cd5 in: ("250","3620","E10","E11") or icd_dgns_cd6 in: ("250","3620","E10","E11") or
+icd_dgns_cd7 in: ("250","3620","E10","E11") or icd_dgns_cd8 in: ("250","3620","E10","E11") or
+icd_dgns_cd9 in: ("250","3620","E10","E11") or icd_dgns_cd10 in: ("250","3620","E10","E11") or
+icd_dgns_cd11 in: ("250","3620","E10","E11") or icd_dgns_cd12 in: ("250","3620","E10","E11") or
+icd_dgns_cd13 in: ("250","3620","E10","E11") or icd_dgns_cd14 in: ("250","3620","E10","E11") or
+icd_dgns_cd15 in: ("250","3620","E10","E11") or icd_dgns_cd16 in: ("250","3620","E10","E11") or
+icd_dgns_cd17 in: ("250","3620","E10","E11") or icd_dgns_cd18 in: ("250","3620","E10","E11") or
+icd_dgns_cd19 in: ("250","3620","E10","E11") or icd_dgns_cd20 in: ("250","3620","E10","E11") or icd_dgns_cd21 in: ("250","3620","E10","E11") or icd_dgns_cd22 in: ("250","3620","E10","E11") or icd_dgns_cd23 in: ("250","3620","E10","E11") or icd_dgns_cd24 in: ("250","3620","E10","E11") or icd_dgns_cd25 in: ("250","3620","E10","E11");
+Run;
+
+/*combining all diabetes claims */
+Data cms.all_diabetes;
+Set cms.all_ip_diabetes_2015 cms.all_ip_diabetes_2016 cms.all_ip_diabetes_2017 cms.all_ip_diabetes_2018 cms.all_ip_diabetes_2019 cms.all_op_diabetes_2015 cms.all_op_diabetes_2016 cms.all_op_diabetes_2017 cms.all_op_diabetes_2018 cms.all_op_diabetes_2019;
+KEEP bene_id clm_from_dt;
+Run;
