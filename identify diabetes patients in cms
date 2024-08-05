@@ -207,36 +207,36 @@ data cms.exclude65_diabetes;
     if age >= 66;
 run;
 
-data cms.all_diabetes_drugs_2014;
-    set partd14.pde_file_2014(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+proc sql;
+    create table cms.all_diabetes_drugs_2014 as
+    select * from partd14.pde_file_2014
     where bene_id in (select bene_id from cms.exclude65_diabetes);
-Run;
-/*getting all diabetes_drugs claims in 2015*/
-data cms.all_diabetes_drugs_2015;
-    set partd15.pde_file_2015(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+Quit;
+proc sql;
+    create table cms.all_diabetes_drugs_2015 as
+    select * from partd15.pde_file_2015
     where bene_id in (select bene_id from cms.exclude65_diabetes);
-Run;
-/*getting all diabetes_drugs claims in 2016*/
-data cms.all_diabetes_drugs_20162;
-    set partd16.pde_file_2016(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+Quit;
+proc sql;
+    create table cms.all_diabetes_drugs_2016 as
+    select * from partd16.pde_file_2016
     where bene_id in (select bene_id from cms.exclude65_diabetes);
-Run;
-/*getting all diabetes_drugs claims in 2017*/
-data cms.all_diabetes_drugs_2017;
-    set partd17.pde_file_2017(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+Quit;
+proc sql;
+    create table cms.all_diabetes_drugs_2017 as
+    select * from partd17.pde_file_2017
     where bene_id in (select bene_id from cms.exclude65_diabetes);
-run;
-/*getting all diabetes_drugs claims in 2018*/
-data cms.all_diabetes_drugs_2018;
-    set partd18.pde_file_2018(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+Quit;
+proc sql;
+    create table cms.all_diabetes_drugs_2018 as
+    select * from partd18.pde_file_2018
     where bene_id in (select bene_id from cms.exclude65_diabetes);
-Run;
-
-/*getting all diabetes_drugs claims in 2019*/
-data cms.all_diabetes_drugs_2019;
-    set partd19.pde_file_2019(keep=bene_id srvc_dt qty_dspnsd_num days_suply_num bn gnn);
+Quit;
+proc sql;
+    create table cms.all_diabetes_drugs_2019 as
+    select * from partd19.pde_file_2019
     where bene_id in (select bene_id from cms.exclude65_diabetes);
-Run;
+Quit;
 
 data cms.alldiabetesdrugs;
     set cms.all_diabetes_drugs_2014 cms.all_diabetes_drugs_2015 cms.all_diabetes_drugs_2016 cms.all_diabetes_drugs_2017 cms.all_diabetes_drugs_2018 cms.all_diabetes_drugs_2019;
