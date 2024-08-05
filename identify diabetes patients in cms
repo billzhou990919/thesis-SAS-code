@@ -289,3 +289,29 @@ data cms.first_drug_claimsv2;
   if upcase(gnn) in: ('GLIMEPIRIDE', 'GLIPIZIDE', 'GLYBURIDE') then sulf = 1;
   if upcase(gnn) in: ('ROSIGLITAZONE', 'PIOGLITAZONE') then tzd = 1;
 run;
+
+
+
+DATA _NULL_;
+    SET cms.first_drug_claimsv2 end=last;
+    IF metformin = 1 THEN count + 1;
+    IF last THEN PUT "Number of patients with metformin=1: " count;
+RUN;
+
+DATA _NULL_;
+    SET cms.first_drug_claimsv2 end=last;
+    IF dpp4 = 1 THEN count + 1;
+    IF last THEN PUT "Number of patients with dpp4=1: " count;
+RUN;
+
+DATA _NULL_;
+    SET cms.first_drug_claimsv2 end=last;
+    IF glp1 = 1 THEN count + 1;
+    IF last THEN PUT "Number of patients with glp1=1: " count;
+RUN;
+
+DATA _NULL_;
+    SET cms.first_drug_claimsv2 end=last;
+    IF sglt2 = 1 THEN count + 1;
+    IF last THEN PUT "Number of patients with sglt2=1: " count;
+RUN;
