@@ -246,10 +246,12 @@ data cms.alldiabetesdrug;
   set cms.alldiabetesdrugs;
   if upcase(gnn) in: ('METFORMIN', 'ALOGLIPTIN', 'LINAGLIPTIN', 'SAXAGLIPTIN', 'SITAGLIPTIN', 'DULAGLUTIDE', 'EXENATIDE', 'LIRAGLUTIDE', 'LIXISENATIDE', 'SEMAGLUTIDE', 'TIRZEPATIDE', 
 'BEXAGLIFLOZIN', 'CANAGLIFLOZIN', 'DAPAGLIFLOZIN', 'EMPAGLIFLOZIN', 'GLIMEPIRIDE', 'GLIPIZIDE', 'GLYBURIDE', 'ROSIGLITAZONE', 'PIOGLITAZONE');
+  keep bene_id srvc_dt gnn;
 run;
 
+
 /* Step 1: Sort both datasets by bene_id and clm_from_dt */
-proc sort data=cms.alldiabetesdrugs;
+proc sort data=cms.alldiabetesdrug;
     by bene_id srvc_dt;
 run;
 
@@ -259,18 +261,23 @@ run;
 
 /* Step 2: Merge datasets */
 data merged_claims;
-    merge cms.alldiabetesdrugs (in=a) cms.exclude65_diabetes (in=b);
+    merge cms.alldiabetesdrug (in=a) cms.exclude65_diabetes (in=b);
     by bene_id;
     if a and b; /* Keep only records that are in both datasets */
 run;
 
 /* Step 3: Filter for first drug claim on or after the earliest claim date */
+proc sort data=merged_claims;
+    by bene_id srvc_dt;
+run;
+
 data cms.first_drug_claims;
     set merged_claims;
     by bene_id;
-    if srvc_dt >= clm_from_dt; /* Assuming clm_from_dt from earliest_claims is renamed to clm_from_dt1 */
-    if first.bene_id; /* Keep only the first occurrence after the earliest claim date */
+    if srvc_dt >= clm_from_dt; 
+    if first.bene_id; 
 run;
+
 
 
 
