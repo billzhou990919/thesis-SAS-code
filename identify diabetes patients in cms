@@ -250,6 +250,49 @@ data cms.alldiabetesdrug;
 run;
 
 
+data cms.alldiabetesdrug_v2;
+  set cms.alldiabetesdrug;
+  metformin = 0;
+  dpp4 = 0;
+  glp1 = 0;
+  sglt2 = 0;
+  sulf = 0;
+  tzd = 0;
+  if upcase(gnn) in: ('METFORMIN') then metformin = 1;
+  if upcase(gnn) in: ('ALOGLIPTIN', 'LINAGLIPTIN', 'SAXAGLIPTIN', 'SITAGLIPTIN') then dpp4 = 1;
+  if upcase(gnn) in: ('DULAGLUTIDE', 'EXENATIDE', 'LIRAGLUTIDE', 'LIXISENATIDE', 'SEMAGLUTIDE', 'TIRZEPATIDE') then glp1 = 1;
+  if upcase(gnn) in: ('BEXAGLIFLOZIN', 'CANAGLIFLOZIN', 'DAPAGLIFLOZIN', 'EMPAGLIFLOZIN') then sglt2 = 1;
+  if upcase(gnn) in: ('GLIMEPIRIDE', 'GLIPIZIDE', 'GLYBURIDE') then sulf = 1;
+  if upcase(gnn) in: ('ROSIGLITAZONE', 'PIOGLITAZONE') then tzd = 1;
+run;
+
+
+proc sql;
+  create table cms.patient_drug_classes as
+  select bene_id,
+         max(metformin) as metformin,
+         max(dpp4) as dpp4,
+         max(glp1) as glp1,
+         max(sglt2) as sglt2,
+         max(sulf) as sulf,
+         max(tzd) as tzd
+  from cms.alldiabetesdrug_v2
+  group by bene_id;
+quit;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Step 1: Sort both datasets by bene_id and clm_from_dt */
 proc sort data=cms.alldiabetesdrug;
     by bene_id srvc_dt;
