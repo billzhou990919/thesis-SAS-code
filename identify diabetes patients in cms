@@ -283,6 +283,48 @@ quit;
 
 
 
+data cms.patient_glp1_sglt2;
+    set cms.patient_drug_classes;
+    where glp1 = 1 or sglt2 = 1;
+run;
+
+
+
+
+
+/* Sort both datasets by bene_id */
+proc sort data=cms.patient_glp1_sglt2;
+    by bene_id;
+run;
+
+proc sort data=cms.mbsf_diabetes;
+    by bene_id;
+run;
+
+/* Merge the datasets and keep only specified columns */
+data cms.glp1_sglt2_mbsf;
+    merge cms.patient_glp1_sglt2(in=a) 
+          cms.mbsf_diabetes(in=b keep=bene_id sex_ident_cd bene_race_cd);
+    by bene_id;
+
+    /* Keep only records that are in both datasets */
+    if a and b;
+run;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -318,7 +360,7 @@ data cms.first_drug_claims;
     set merged_claims;
     by bene_id;
     if srvc_dt >= clm_from_dt; 
-    if first.bene_id; 
+    if first.bene_id;
 run;
 
 
@@ -365,3 +407,9 @@ DATA _NULL_;
     IF sglt2 = 1 THEN count + 1;
     IF last THEN PUT "Number of patients with sglt2=1: " count;
 RUN;
+
+
+proc sql; 
+    select count (bene_id) as tot_bene, count (distinct bene_id) as un_bene from cms.patient_drug_classes
+    where metformin = 1;
+quit;
