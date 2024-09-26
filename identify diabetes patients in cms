@@ -1,4 +1,4 @@
-/*exclude previous diabetes disease dx */
+
 Data cms.all_op_diabetes_2015;
 Set op15.outpatient_base_claims_k_2015;
 Where prncpal_dgns_cd in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd1 in: ("250","3620","E10","E11") or icd_dgns_cd3 in: ("250","3620","E10","E11") or icd_dgns_cd4 in: ("250","3620","E10","E11") or
@@ -193,6 +193,7 @@ run;
 proc sort data=cms.earliest_claims;
     by bene_id;
 run;
+
 /*add birth date from mbsf to drug claims file*/
 data cms.earliest_claimsv2;
     merge cms.earliest_claims(in=a) cms.mbsf_diabetes(in=b);
@@ -293,7 +294,7 @@ quit;
 
 
 
-/* Step 1: Sort both datasets by bene_id and clm_from_dt */
+
 proc sort data=cms.alldiabetesdrug;
     by bene_id srvc_dt;
 run;
@@ -302,14 +303,13 @@ proc sort data=cms.exclude65_diabetes;
     by bene_id clm_from_dt;
 run;
 
-/* Step 2: Merge datasets */
 data merged_claims;
     merge cms.alldiabetesdrug (in=a) cms.exclude65_diabetes (in=b);
     by bene_id;
     if a and b; /* Keep only records that are in both datasets */
 run;
 
-/* Step 3: Filter for first drug claim on or after the earliest claim date */
+
 proc sort data=merged_claims;
     by bene_id srvc_dt;
 run;
