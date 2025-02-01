@@ -5,7 +5,7 @@ proc sql;
     from mscan.exclude_18;
 quit;
 
-/* Step 2: Sort both datasets by enrolid and year for merging */
+/* Sort both datasets by enrolid and year for merging */
 proc sort data=mscan.all_enrollment;
     by enrolid year;
 run;
@@ -14,7 +14,7 @@ proc sort data=mscan.day0_month_year;
     by enrolid;
 run;
 
-/* Step 3: Merge the datasets */
+/*  Merge the datasets */
 data mscan.merge_data;
     merge mscan.all_enrollment (in=a)
           mscan.day0_month_year (in=b);
@@ -22,7 +22,7 @@ data mscan.merge_data;
     if b;
 run;
 
-/* Step 4: Check for continuous enrollment and create a temporary dataset of enrolid values */
+/* Check for continuous enrollment and create a temporary dataset of enrolid values */
 data mscan.temp_continuous;
     set mscan.merge_data;
     by enrolid;
@@ -50,11 +50,10 @@ data mscan.temp_continuous;
         end;
     end;
 
-    /* Output individuals with continuous enrollment to the temporary dataset */
     if last.enrolid and continuous;
 run;
 
-/* Step 5: Merge the temporary dataset back with exclude_18 to filter out individuals */
+/* Merge the temporary dataset back with exclude_18 to filter out individuals */
 data mscan.final_continuous_enrollment;
     merge mscan.exclude_18 (in=a)
           mscan.temp_continuous (in=b);
@@ -62,7 +61,6 @@ data mscan.final_continuous_enrollment;
     if b;
 run;
 
-/* Optional: Clean up intermediate datasets */
 proc datasets library=mscan;
     delete day0_month_year merge_data temp_continuous;
 run;
